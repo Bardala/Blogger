@@ -2,11 +2,12 @@
 
 /* base styles */
 * {
-  margin: 0;
+  /* margin: 0; */
   font-family: "Quicksand";
   color: #333;
 }
 
+/* navbar */
 .navbar {
   padding: 20px;
   display: flex;
@@ -59,4 +60,23 @@
 
 .blog-preview a {
   text-decoration: none;
+}
+
+/* blog details page*/
+.blog-details h2 {
+  font-size: 24px;
+  color: #f1356d;
+  margin-bottom: 8px;
+}
+
+.blog-details div {
+  margin: 20px 0;
+  color: #000;
+}
+
+.blog-details p {
+  line-height: 1.5;
+  margin: 10px 0;
+  padding: 0 16px;
+  background-color: #fafafa;
 }
