@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Create = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [author, setAuthor] = useState("Islam");
   const [isPending, setIsPending] = useState(false);
+  const nav = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -18,6 +20,7 @@ const Create = () => {
       body: JSON.stringify(blog),
     }).then(() => {
       setIsPending(false);
+      nav("/"); // navigate to home page
       console.log("new blog added");
     });
   };
