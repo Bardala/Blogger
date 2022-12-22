@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useFetch from "./useFetch";
 
 const ReadBlog = () => {
@@ -8,6 +8,13 @@ const ReadBlog = () => {
     isPending,
     error,
   } = useFetch("http://localhost:8000/blogs/" + id);
+  const nav = useNavigate();
+
+  const handleDelete = () => {
+    fetch("http://localhost:8000/blogs/" + blog.id, {
+      method: "DELETE",
+    }).then(() => nav("/"));
+  };
 
   return (
     <div className="blog-details">
@@ -20,6 +27,7 @@ const ReadBlog = () => {
           <p>{blog.body}</p>
         </article>
       )}
+      <button onClick={handleDelete}>Delete</button>
     </div>
   );
 };

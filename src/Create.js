@@ -15,12 +15,12 @@ const Create = () => {
     setIsPending(true);
 
     fetch("http://localhost:8000/blogs/", {
-      method: "Post",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(blog),
     }).then(() => {
       setIsPending(false);
-      nav("/"); // navigate to home page
+      nav("/");
       console.log("new blog added");
     });
   };

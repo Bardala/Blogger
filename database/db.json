@@ -13,30 +13,6 @@
       "id": 2
     },
     {
-      "title": "new blog",
-      "body": "hello I will add a new blog",
-      "author": "Islam",
-      "id": 3
-    },
-    {
-      "title": "Islam Blog",
-      "body": "Lablabla",
-      "author": "Islam",
-      "id": 4
-    },
-    {
-      "title": "Islam Blog",
-      "body": "Lablabla",
-      "author": "Islam",
-      "id": 5
-    },
-    {
-      "title": "React router 6",
-      "body": "In react-router-dom@6, you need to use \"useNavigate\" instead of \"useHistory\"",
-      "author": "Islam",
-      "id": 6
-    },
-    {
       "title": "react-router-dom@6",
       "body": "in react-router-dom@6, you need to use {useNavigate} rather than {useHistory}",
       "author": "Islam",
