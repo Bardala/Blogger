@@ -17,6 +17,12 @@
       "body": "in react-router-dom@6, you need to use {useNavigate} rather than {useHistory}",
       "author": "Islam",
       "id": 7
+    },
+    {
+      "title": "Blog ID",
+      "body": "blog id ",
+      "author": "Islam",
+      "id": 8
     }
   ]
 }
