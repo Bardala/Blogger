@@ -6,22 +6,29 @@ const useFetch = (url) => {
   const [isPending, setIsPending] = useState(true);
 
   useEffect(() => {
-    fetch(url)
-      .then((res) => {
-        if (!res.ok) throw Error("could not fetch the data from the server");
-        return res.json();
-      })
-      .then((data) => {
-        setIsPending(false);
-        setData(data);
-        setError(null);
-      })
-      .catch((err) => {
-        setIsPending(false);
-        setError(err.message);
-      });
+    setTimeout(() => {
+      fetch(url)
+        .then((res) => {
+          if (!res.ok) throw Error("could not fetch the data from the server");
+          return res.json();
+        })
+        .then((data) => {
+          setIsPending(false);
+          setData(data);
+          setError(null);
+        })
+        .catch((err) => {
+          setIsPending(false);
+          setError(err.message);
+        });
+    }, 1000);
   }, [url]);
   return { data, error, isPending };
 };
 
 export default useFetch;
+
+/**
+ * Connect Json server
+ * npx json-server --watch database/db.json --port 8000
+ */
