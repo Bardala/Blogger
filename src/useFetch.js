@@ -9,7 +9,7 @@ const useFetch = (url) => {
     setTimeout(() => {
       fetch(url)
         .then((res) => {
-          if (!res.ok) throw Error("could not fetch the data from the server");
+          if (!res.ok) throw Error("could not fetch the data from the server"); // auto catches network / connection error
           return res.json();
         })
         .then((data) => {
@@ -18,6 +18,7 @@ const useFetch = (url) => {
           setError(null);
         })
         .catch((err) => {
+          // auto catches network / connection error
           setIsPending(false);
           setError(err.message);
         });

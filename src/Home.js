@@ -12,11 +12,9 @@ const Home = () => {
     <div className="home">
       {error && <p>{error}</p>}
       {isPending && <p>Loading...</p>}
-      {console.log(blogs)}
       {blogs && <BlogList blogs={blogs} />}
     </div>
   );
 };
 
 export default Home;
-
