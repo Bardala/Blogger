@@ -1,15 +1,16 @@
-import Create from "./Create";
-import Home from "./Home";
-import Navbar from "./NavBar";
+import Create from "./components/Create";
+import Home from "./components/Home";
+import Navbar from "./components/NavBar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ReadBlog from "./ReadBlog";
-import NotFound from "./NotFound";
+import ReadBlog from "./components/ReadBlog";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Navbar />
+
         <Routes>
           <Route path="/" element={<Home />} />
 
@@ -25,6 +26,3 @@ function App() {
 }
 
 export default App;
-// git add .
-// git commit -m "Second commit"
-// git push
