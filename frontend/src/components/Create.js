@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const Create = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [author, setAuthor] = useState("Islam");
+  const [author, setAuthor] = useState("");
   const [isPending, setIsPending] = useState(false);
   const nav = useNavigate();
 
@@ -45,10 +45,11 @@ const Create = () => {
         ></textarea>
 
         <label>Blog author:</label>
-        <select value={author} onChange={(e) => setAuthor(e.target.value)}>
-          <option value="Islam">Islam</option>
-          <option value="Ali">Ali</option>
-        </select>
+        <textarea
+          required
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
+        ></textarea>
         {!isPending && <button>Add Blog</button>}
         {isPending && <button disabled>Adding Blog...</button>}
       </form>

@@ -17,6 +17,8 @@ mongoose
 
 // get all blogs
 app.get("/", async function getAllBlogs(req, res) {
+  console.log("get all blogs");
+
   const blogs = await Blogs.find({});
 
   res.status(200).json(blogs);
@@ -25,15 +27,16 @@ app.get("/", async function getAllBlogs(req, res) {
 // post a blog
 app.post("/createBlog", async function createBlog(req, res) {
   console.log("post a blog");
-  const { title, body } = req.body;
+  const { title, body, author } = req.body;
   let emptyFields = [];
   if (!body) emptyFields.push("body");
   if (!title) emptyFields.push("title");
+  if (!author) emptyFields.push("author");
   if (emptyFields.length)
     return res.status(400).json({ error: "Please fill all fields" });
 
   try {
-    const blog = await Blogs.create({ title, body });
+    const blog = await Blogs.create({ title, body, author });
     res.status(200).json(blog);
   } catch (error) {
     res.status(400).json({ error: error.message });
