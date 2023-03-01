@@ -20,8 +20,6 @@ app.get("/", async function getAllBlogs(req, res) {
   const blogs = await Blogs.find({});
 
   res.status(200).json(blogs);
-
-  // res.send("get all blogs");
 });
 
 // post a blog
@@ -53,7 +51,7 @@ app.get("/:id", async function getBlog(req, res) {
   }
 
   try {
-    const blog = await Blogs.findById({ id });
+    const blog = await Blogs.findById(id);
     if (!blog) return res.status(400).json({ error: "No such blog" });
     res.status(200).json(blog);
   } catch (error) {
@@ -62,7 +60,7 @@ app.get("/:id", async function getBlog(req, res) {
 });
 
 // delete a blog
-app.get("/:id", async function deleteBlog(req, res) {
+app.delete("/:id", async function deleteBlog(req, res) {
   console.log("delete a blog");
 
   const { id } = req.params;
@@ -70,7 +68,7 @@ app.get("/:id", async function deleteBlog(req, res) {
     return res.status(400).json({ error: "Invalid id" });
 
   try {
-    const blog = await mongoose.findOneAndDelete({ _id: id });
+    const blog = await Blogs.findOneAndDelete({ _id: id });
     if (!blog)
       return res
         .status(400)
