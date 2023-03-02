@@ -32,7 +32,12 @@ const ReadBlog = () => {
   const handleDelete = () => {
     fetch(api, {
       method: "DELETE",
-    }).then(() => nav("/"));
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(res.statusText);
+      })
+      .then(() => nav("/"))
+      .catch((err) => console.log(err));
   };
 
   return (
