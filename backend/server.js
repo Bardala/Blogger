@@ -2,9 +2,12 @@ require("dotenv").config();
 const Blogs = require("./models/blogModel");
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
+
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 mongoose
   .connect(process.env.MONGO_URI)
@@ -16,7 +19,7 @@ mongoose
   .catch((error) => console.log(error));
 
 // get all blogs
-app.get("/", async function getAllBlogs(req, res) {
+app.get("/blogs", async function getAllBlogs(req, res) {
   console.log("get all blogs");
 
   const blogs = await Blogs.find({});

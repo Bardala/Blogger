@@ -11,10 +11,10 @@ const Create = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const blog = { title, body, author };
-
+    const api = "http://localhost:4000/createBlog";
     setIsPending(true);
 
-    fetch("http://localhost:8000/blogs/", {
+    fetch(api, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(blog),
