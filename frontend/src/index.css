@@ -163,8 +163,7 @@
 }
 
 .create input,
-.create textarea,
-.create select {
+.create textarea {
   width: 100%;
   padding: 6px 10px;
   margin: 10px 0;

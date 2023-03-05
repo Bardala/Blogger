@@ -26,7 +26,6 @@ const Home = () => {
     };
     getBlogs();
   }, [url]);
-  // console.log(blogs);
 
   return (
     <div className="home">

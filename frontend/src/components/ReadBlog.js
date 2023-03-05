@@ -15,17 +15,19 @@ const ReadBlog = () => {
 
   useEffect(() => {
     const getBlog = async () => {
-      setIsPending(true);
-      const response = await fetch(blogsURL, {
-        method: "GET",
-        mode: "cors",
-      });
-      if (!response.ok) {
-        setError(response.status);
-      } else console.log("Response of getBlog");
-      const data = await response.json();
-      setBlog(data);
-      setIsPending(false);
+      try {
+        setIsPending(true);
+        const response = await fetch(blogsURL);
+        if (!response.ok) throw new Error(response.statusText);
+        else console.log("Response of getBlog");
+        const data = await response.json();
+        setBlog(data);
+        setIsPending(false);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsPending(false);
+      }
     };
     getBlog();
   }, [blogsURL]);
@@ -36,9 +38,9 @@ const ReadBlog = () => {
         method: "GET",
         mode: "cors",
       });
-      if (response.ok) console.log("Response of getComments");
-      else return response.statusText;
       const data = await response.json();
+      if (response.ok) console.log("Response of getComments");
+      else return console.log(data.error);
       setComments(data);
     };
 
@@ -46,12 +48,12 @@ const ReadBlog = () => {
   }, [commentsURL, id]);
 
   const handleDelete = () => {
-    // remember you need to delete its comments though
+    // remember you need to delete its comments also
     fetch(blogsURL, {
       method: "DELETE",
     })
       .then((res) => {
-        if (!res.ok) throw new Error(res.error.message);
+        if (!res.ok) setError(res.json().error);
       })
       .then(() => nav("/"))
       .catch((err) => console.log(err.message));
@@ -63,26 +65,27 @@ const ReadBlog = () => {
         {error && <p>{error}</p>}
         {isPending && <p>Loading...</p>}
         {blog && (
-          <article>
-            <h2>{blog.title}</h2>
-            <div>Written by {blog.author}</div>
-            <p>{blog.body}</p>
-          </article>
-        )}
-        <button onClick={handleDelete}>Delete</button>
-      </div>
-
-      <CreateComment blogId={id} />
-
-      <div className="comments">
-        <p>Comments</p>
-        {comments.length > 0 && (
           <div>
-            {comments.map((comment) => (
-              <div className="comment" key={comment._id}>
-                <p>{comment.body}</p>
-              </div>
-            ))}
+            <article>
+              <h2>{blog.title}</h2>
+              <div>Written by {blog.author}</div>
+              <p>{blog.body}</p>
+            </article>
+            <button onClick={handleDelete}>Delete</button>
+            <CreateComment blogId={id} />
+
+            <div className="comments">
+              <p>Comments</p>
+              {comments.length > 0 && (
+                <div>
+                  {comments.map((comment) => (
+                    <div className="comment" key={comment._id}>
+                      <p>{comment.body}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>
