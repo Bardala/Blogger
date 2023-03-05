@@ -11,8 +11,7 @@
     "@types/express": "^4.17.17"
   },
   "scripts": {
-    "start": "node server.js",
-    "backend": "nodemon server.js"
+    "start": "nodemon server.js"
   },
   "name": "backend",
   "version": "1.0.0",

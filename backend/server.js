@@ -1,8 +1,9 @@
 require("dotenv").config();
 const Blogs = require("./models/blogModel");
+const Comments = require("./models/commentModel");
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
 const app = express();
 
@@ -31,13 +32,8 @@ app.get("/blogs", async function getAllBlogs(req, res) {
 app.post("/createBlog", async function createBlog(req, res) {
   console.log("post a blog");
   const { title, body, author } = req.body;
-  let emptyFields = [];
-  if (!body) emptyFields.push("body");
-  if (!title) emptyFields.push("title");
-  if (!author) emptyFields.push("author");
-  if (emptyFields.length)
+  if (!body || !title || !author)
     return res.status(400).json({ error: "Please fill all fields" });
-
   try {
     const blog = await Blogs.create({ title, body, author });
     res.status(200).json(blog);
@@ -47,7 +43,7 @@ app.post("/createBlog", async function createBlog(req, res) {
 });
 
 // get a blog
-app.get("/:id", async function getBlog(req, res) {
+app.get("/blogs/:id", async function getBlog(req, res) {
   console.log("get a blog");
 
   const { id } = req.params;
@@ -66,7 +62,7 @@ app.get("/:id", async function getBlog(req, res) {
 });
 
 // delete a blog
-app.delete("/:id", async function deleteBlog(req, res) {
+app.delete("/blogs/:id", async function deleteBlog(req, res) {
   console.log("delete a blog");
 
   const { id } = req.params;
@@ -80,6 +76,37 @@ app.delete("/:id", async function deleteBlog(req, res) {
         .status(400)
         .json({ error: "The blog which try to delete it is not exist" });
     res.status(200).json({ blog });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// add comment to a blog
+app.post("/createComment", async function createComment(req, res) {
+  console.log("create a comment");
+  const { blogId, body } = req.body;
+  if (!body || !blogId)
+    return res.status(400).json({ error: "error in comment body or blogId" });
+  if (!mongoose.Types.ObjectId.isValid(blogId))
+    return res.status(400).json({ error: "invalid id" });
+  try {
+    const comment = await Comments.create({ body, blogId });
+    res.status(200).json(comment);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// get comments
+app.get("/getComments", async function getComments(req, res) {
+  console.log("getComments");
+  const blogId = req.query.blogId;
+  if (!mongoose.Types.ObjectId.isValid(blogId))
+    return res.status(400).json({ error: "invalid id" });
+
+  try {
+    const comments = await Comments.find({ blogId });
+    res.status(200).json(comments);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
