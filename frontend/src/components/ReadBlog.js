@@ -1,11 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CreateComment from "./CreateComment";
+import { useBlogContext } from "../hooks/useBlogContext";
 
 const ReadBlog = () => {
   const nav = useNavigate();
   const { id } = useParams();
-  const [blog, setBlog] = useState();
+  const { blog, dispatch } = useBlogContext();
   const [comments, setComments] = useState([]);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState();
@@ -21,7 +22,7 @@ const ReadBlog = () => {
         if (!response.ok) throw new Error(response.statusText);
         else console.log("Response of getBlog");
         const data = await response.json();
-        setBlog(data);
+        dispatch({ type: "GET-BLOG", payload: data });
         setIsPending(false);
       } catch (error) {
         setError(error.message);
@@ -30,7 +31,7 @@ const ReadBlog = () => {
       }
     };
     getBlog();
-  }, [blogsURL]);
+  }, [blogsURL, dispatch]);
 
   useEffect(() => {
     const getComments = async () => {
@@ -47,16 +48,21 @@ const ReadBlog = () => {
     getComments();
   }, [commentsURL, id]);
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     // remember you need to delete its comments also
-    fetch(blogsURL, {
-      method: "DELETE",
-    })
-      .then((res) => {
-        if (!res.ok) setError(res.json().error);
-      })
-      .then(() => nav("/"))
-      .catch((err) => console.log(err.message));
+    try {
+      const response = await fetch(blogsURL, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        mode: "cors",
+      });
+      if (!response.ok) console.log(response.json().error);
+      else console.log("the blog is deleted");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      nav("/");
+    }
   };
 
   return (

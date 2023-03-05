@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import BlogList from "./BlogList";
+import { useBlogContext } from "../hooks/useBlogContext";
 
 const Home = () => {
   const [error, setError] = useState("");
   const [isPending, setIsPending] = useState(false);
-  const [blogs, setBlogs] = useState();
+  const { dispatch, blogs } = useBlogContext();
   const url = "http://localhost:4000/blogs";
 
   useEffect(() => {
@@ -16,16 +17,15 @@ const Home = () => {
           throw new Error(response.statusText);
         }
         const data = await response.json();
-        setIsPending(false);
-        setBlogs(data);
+        dispatch({ type: "GET-ALL-BLOGS", payload: data });
       } catch (error) {
-        // Catch any error from fetch or json parsing
-        setIsPending(false);
         setError(error.message);
+      } finally {
+        setIsPending(false);
       }
     };
     getBlogs();
-  }, [url]);
+  }, [dispatch, url]);
 
   return (
     <div className="home">
