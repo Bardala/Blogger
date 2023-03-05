@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Create = () => {
+const CreateBlog = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [author, setAuthor] = useState("");
@@ -11,12 +11,13 @@ const Create = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const blog = { title, body, author };
-    const api = "http://localhost:4000/createBlog";
+    const url = "http://localhost:4000/createBlog";
     setIsPending(true);
 
-    fetch(api, {
+    fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      mode: "cors",
       body: JSON.stringify(blog),
     }).then(() => {
       setIsPending(false);
@@ -27,7 +28,7 @@ const Create = () => {
 
   return (
     <div className="create">
-      <h2>Add a New Blog</h2>
+      <h4>Add a New Blog</h4>
       <form onSubmit={handleSubmit}>
         <label>Blog Title:</label>
         <input
@@ -57,4 +58,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default CreateBlog;

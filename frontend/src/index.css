@@ -85,6 +85,7 @@
   margin: 10px 0;
   padding: 0 16px;
   background-color: #fafafa;
+  color: #240f0f;
 }
 
 .blog-details button {
@@ -94,6 +95,53 @@
   padding: 8px;
   border-radius: 8px;
   cursor: pointer;
+}
+
+/* comments */
+.comments {
+  margin: 20px 0;
+}
+
+.comments p {
+  font-weight: bold;
+  color: #f1356d;
+  margin-top: 50px;
+  margin-bottom: 5px;
+}
+
+.comment {
+  padding: 10px;
+  border: 1px #f1356d;
+}
+
+.comment p {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-style: normal;
+  color: #4b1616;
+}
+
+.create-comment {
+  margin: 20px 0;
+}
+
+.create-comment p {
+  font-weight: bold;
+  color: #f1356d;
+}
+
+.create-comment textarea {
+  width: 250px;
+  height: 50px;
+  border: 1px solid #fafafa;
+  padding: 10px;
+}
+
+.create-comment button {
+  background: #f1356d;
+  color: #fff;
+  border: none;
+  padding: 8px;
 }
 
 /*Create Blog Page*/

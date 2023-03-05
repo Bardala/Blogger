@@ -5,13 +5,13 @@ const Home = () => {
   const [error, setError] = useState("");
   const [isPending, setIsPending] = useState(false);
   const [blogs, setBlogs] = useState();
-  const api = "http://localhost:4000/blogs";
+  const url = "http://localhost:4000/blogs";
 
   useEffect(() => {
     const getBlogs = async () => {
       setIsPending(true);
       try {
-        const response = await fetch(api);
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error(response.statusText);
         }
@@ -25,8 +25,8 @@ const Home = () => {
       }
     };
     getBlogs();
-  }, [api]);
-  console.log(blogs);
+  }, [url]);
+  // console.log(blogs);
 
   return (
     <div className="home">
