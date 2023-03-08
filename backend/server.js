@@ -71,6 +71,7 @@ app.delete("/blogs/:id", async function deleteBlog(req, res) {
 
   try {
     const blog = await Blogs.findOneAndDelete({ _id: id });
+    await Comments.deleteMany({ blogId: id });
     if (!blog)
       return res
         .status(400)
