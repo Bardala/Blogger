@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useCommentContext } from "../context/CommentsContext";
 
 const CreateComment = (props) => {
   const { blogId } = props;
   const [commentBody, setCommentBody] = useState();
+  const { dispatchComments } = useCommentContext();
   const url = `http://localhost:4000/createComment`;
 
   const postComment = async (e) => {
@@ -16,8 +18,14 @@ const CreateComment = (props) => {
       },
       body: JSON.stringify({ body: commentBody, blogId }),
     });
-    if (!response.ok) return response.statusText;
-    else console.log("Success: new comment added");
+
+    const data = await response.json();
+
+    if (response.ok) {
+      dispatchComments({ type: "CREATE-COMMENT", payload: data });
+      setCommentBody("");
+      console.log("Success: new comment added");
+    } else return response.statusText;
   };
 
   return (

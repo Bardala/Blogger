@@ -2,12 +2,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CreateComment from "./CreateComment";
 import { useBlogContext } from "../hooks/useBlogContext";
+import { useCommentContext } from "../context/CommentsContext";
+import formatDistantToNow from "date-fns/formatDistanceToNow";
 
-const ReadBlog = () => {
+const BlogDetails = () => {
   const nav = useNavigate();
   const { id } = useParams();
   const { blog, dispatch } = useBlogContext();
-  const [comments, setComments] = useState([]);
+  // const [comments, setComments] = useState([]);
+  const { comments, dispatchComments } = useCommentContext();
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState();
 
@@ -42,11 +45,12 @@ const ReadBlog = () => {
       const data = await response.json();
       if (response.ok) console.log("Response of getComments");
       else return console.log(data.error);
-      setComments(data);
+      // setComments(data);
+      dispatchComments({ type: "GET-COMMENTS", payload: data });
     };
 
     getComments();
-  }, [commentsURL, id]);
+  }, [commentsURL, dispatchComments, id]);
 
   const handleDelete = async () => {
     // remember you need to delete its comments also
@@ -73,8 +77,15 @@ const ReadBlog = () => {
         <div>
           <article>
             <h2>{blog.title}</h2>
-            <div>Written by {blog.author}</div>
-            <p>{blog.body}</p>
+            <div>
+              Written by <strong>{blog.author}</strong>
+            </div>
+            <p className="blog-body">{blog.body}</p>
+            <p className="created-at">
+              {formatDistantToNow(new Date(blog.createdAt), {
+                addSuffix: true,
+              })}
+            </p>
           </article>
           <button onClick={handleDelete}>Delete</button>
 
@@ -82,10 +93,15 @@ const ReadBlog = () => {
 
           <div className="comments">
             <p>Comments</p>
-            {comments.length > 0 &&
+            {comments &&
               comments.map((comment) => (
                 <div className="comment" key={comment._id}>
                   <p>{comment.body}</p>
+                  <p className="created-at">
+                    {formatDistantToNow(new Date(comment.createdAt), {
+                      addSuffix: true,
+                    })}
+                  </p>
                 </div>
               ))}
           </div>
@@ -95,4 +111,4 @@ const ReadBlog = () => {
   );
 };
 
-export default ReadBlog;
+export default BlogDetails;

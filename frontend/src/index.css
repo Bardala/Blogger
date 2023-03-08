@@ -67,6 +67,7 @@
   font-size: small;
 }
 
+
 /* read blogs page*/
 .blog-details {
   padding: 20px;
@@ -85,7 +86,7 @@
   color: #000;
 }
 
-.blog-details p {
+.blog-details .blog-body {
   line-height: 1.5;
   margin: 10px 0;
   padding: 0 16px;
@@ -112,7 +113,6 @@
 }
 
 .comments p {
-  font-weight: bold;
   color: #f1356d;
   margin-top: 50px;
   margin-bottom: 5px;

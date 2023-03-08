@@ -23,7 +23,7 @@ mongoose
 app.get("/blogs", async function getAllBlogs(req, res) {
   console.log("get all blogs");
 
-  const blogs = await Blogs.find({});
+  const blogs = await Blogs.find({}).sort({ createdAt: -1 });
 
   res.status(200).json(blogs);
 });
@@ -105,7 +105,7 @@ app.get("/getComments", async function getComments(req, res) {
     return res.status(400).json({ error: "invalid id" });
 
   try {
-    const comments = await Comments.find({ blogId });
+    const comments = await Comments.find({ blogId }).sort({ createdAt: -1 });
     res.status(200).json(comments);
   } catch (error) {
     res.status(400).json({ error: error.message });
