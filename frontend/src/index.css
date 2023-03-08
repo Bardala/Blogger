@@ -44,8 +44,9 @@
 /* blog previews / list */
 .blog-preview {
   padding: 10px 16px;
-  margin: 20px 0;
   border-bottom: 1px solid #fafafa;
+  margin-left: 88.8px;
+  margin-right: 88.8px;
 }
 
 .blog-preview:hover {
@@ -60,6 +61,10 @@
 
 .blog-preview a {
   text-decoration: none;
+}
+
+.created-at {
+  font-size: small;
 }
 
 /* read blogs page*/
@@ -97,6 +102,10 @@
   cursor: pointer;
 }
 
+#read-blog {
+  margin-bottom: 100px;
+}
+
 /* comments */
 .comments {
   margin: 20px 0;
@@ -131,10 +140,13 @@
 }
 
 .create-comment textarea {
+  display: inline;
   width: 250px;
-  height: 50px;
+  height: 25px;
   border: 1px solid #fafafa;
   padding: 10px;
+  border-style: double;
+  border-color: #f4f4f4;
 }
 
 .create-comment button {

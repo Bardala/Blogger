@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const CreateComment = (props) => {
   const { blogId } = props;
   const [commentBody, setCommentBody] = useState();
   const url = `http://localhost:4000/createComment`;
-  const nav = useNavigate();
 
-  const postComment = async () => {
+  const postComment = async (e) => {
+    e.preventDefault();
+
     const response = await fetch(url, {
       method: "POST",
       mode: "cors",
@@ -18,7 +18,6 @@ const CreateComment = (props) => {
     });
     if (!response.ok) return response.statusText;
     else console.log("Success: new comment added");
-    nav(`/blogs/${blogId}`);
   };
 
   return (

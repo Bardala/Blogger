@@ -66,35 +66,31 @@ const ReadBlog = () => {
   };
 
   return (
-    <div>
-      <div className="blog-details">
-        {error && <p>{error}</p>}
-        {isPending && <p>Loading...</p>}
-        {blog && (
-          <div>
-            <article>
-              <h2>{blog.title}</h2>
-              <div>Written by {blog.author}</div>
-              <p>{blog.body}</p>
-            </article>
-            <button onClick={handleDelete}>Delete</button>
-            <CreateComment blogId={id} />
+    <div className="blog-details">
+      {error && <p>{error}</p>}
+      {isPending && <p>Loading...</p>}
+      {blog && (
+        <div>
+          <article>
+            <h2>{blog.title}</h2>
+            <div>Written by {blog.author}</div>
+            <p>{blog.body}</p>
+          </article>
+          <button onClick={handleDelete}>Delete</button>
 
-            <div className="comments">
-              <p>Comments</p>
-              {comments.length > 0 && (
-                <div>
-                  {comments.map((comment) => (
-                    <div className="comment" key={comment._id}>
-                      <p>{comment.body}</p>
-                    </div>
-                  ))}
+          <CreateComment blogId={id} />
+
+          <div className="comments">
+            <p>Comments</p>
+            {comments.length > 0 &&
+              comments.map((comment) => (
+                <div className="comment" key={comment._id}>
+                  <p>{comment.body}</p>
                 </div>
-              )}
-            </div>
+              ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
