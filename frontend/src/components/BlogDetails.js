@@ -9,7 +9,6 @@ const BlogDetails = () => {
   const nav = useNavigate();
   const { id } = useParams();
   const { blog, dispatch } = useBlogContext();
-  // const [comments, setComments] = useState([]);
   const { comments, dispatchComments } = useCommentContext();
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState();
@@ -45,7 +44,6 @@ const BlogDetails = () => {
       const data = await response.json();
       if (response.ok) console.log("Response of getComments");
       else return console.log(data.error);
-      // setComments(data);
       dispatchComments({ type: "GET-COMMENTS", payload: data });
     };
 
@@ -53,7 +51,6 @@ const BlogDetails = () => {
   }, [commentsURL, dispatchComments, id]);
 
   const handleDelete = async () => {
-    // remember you need to delete its comments also
     try {
       const response = await fetch(blogsURL, {
         method: "DELETE",
@@ -75,35 +72,39 @@ const BlogDetails = () => {
       {isPending && <p>Loading...</p>}
       {blog && (
         <div>
-          <article>
-            <h2>{blog.title}</h2>
-            <div>
-              Written by <strong>{blog.author}</strong>
+          <div className="blog-content">
+            <article>
+              <h2>{blog.title}</h2>
+              <div>
+                Written by <strong>{blog.author}</strong>
+              </div>
+              <p className="blog-body">{blog.body}</p>
+              <p className="created-at">
+                {formatDistantToNow(new Date(blog.createdAt), {
+                  addSuffix: true,
+                })}
+              </p>
+            </article>
+            <button onClick={handleDelete}>Delete</button>
+          </div>
+
+          <div className="blog-comments">
+            <CreateComment blogId={id} />
+
+            <div className="comments">
+              <p>Comments</p>
+              {comments &&
+                comments.map((comment) => (
+                  <div className="comment" key={comment._id}>
+                    <p>{comment.body}</p>
+                    <p className="created-at">
+                      {formatDistantToNow(new Date(comment.createdAt), {
+                        addSuffix: true,
+                      })}
+                    </p>
+                  </div>
+                ))}
             </div>
-            <p className="blog-body">{blog.body}</p>
-            <p className="created-at">
-              {formatDistantToNow(new Date(blog.createdAt), {
-                addSuffix: true,
-              })}
-            </p>
-          </article>
-          <button onClick={handleDelete}>Delete</button>
-
-          <CreateComment blogId={id} />
-
-          <div className="comments">
-            <p>Comments</p>
-            {comments &&
-              comments.map((comment) => (
-                <div className="comment" key={comment._id}>
-                  <p>{comment.body}</p>
-                  <p className="created-at">
-                    {formatDistantToNow(new Date(comment.createdAt), {
-                      addSuffix: true,
-                    })}
-                  </p>
-                </div>
-              ))}
           </div>
         </div>
       )}
