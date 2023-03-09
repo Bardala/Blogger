@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CreateComment from "./CreateComment";
 import { useBlogContext } from "../hooks/useBlogContext";
-import { useCommentContext } from "../context/CommentsContext";
+import { useCommentContext } from "../hooks/useCommentContext";
 import formatDistantToNow from "date-fns/formatDistanceToNow";
 
 const BlogDetails = () => {
