@@ -96,7 +96,7 @@ const BlogDetails = () => {
               {comments &&
                 comments.map((comment) => (
                   <div className="comment" key={comment._id}>
-                    <p>{comment.body}</p>
+                    <p className="comment-body">{comment.body}</p>
                     <p className="created-at">
                       {formatDistantToNow(new Date(comment.createdAt), {
                         addSuffix: true,

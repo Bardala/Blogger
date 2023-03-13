@@ -1,11 +1,15 @@
 require("dotenv").config();
 const Blogs = require("./models/blogModel");
 const Comments = require("./models/commentModel");
+const User = require("./models/userModel");
+const jwt = require("jsonwebtoken");
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-
 const app = express();
+
+const createToken = (_id) =>
+  jwt.sign({ _id }, process.env.SECRET, { expiresIn: "3d" });
 
 app.use(express.json());
 app.use(cors());
@@ -108,6 +112,32 @@ app.get("/getComments", async function getComments(req, res) {
   try {
     const comments = await Comments.find({ blogId }).sort({ createdAt: -1 });
     res.status(200).json(comments);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Authentications
+app.post("/signup", async function signup(req, res) {
+  console.log("signup");
+  const { email, password } = req.body;
+  try {
+    const user = await User.signup(email, password);
+    const token = createToken(user._id);
+    res.status(200).json({ email, token });
+    console.log("Success signup");
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.post("/login", async function login(req, res) {
+  console.log("login");
+  const { email, password } = req.body;
+  try {
+    const user = await User.login(email, password);
+    const token = createToken(user._id);
+    res.status(200).json({ email, token });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

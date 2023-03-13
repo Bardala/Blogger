@@ -5,13 +5,13 @@ const CreateBlog = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [author, setAuthor] = useState("");
+  const blog = { title, body, author };
   const [isPending, setIsPending] = useState(false);
+  const url = "http://localhost:4000/createBlog";
   const nav = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const blog = { title, body, author };
-    const url = "http://localhost:4000/createBlog";
     setIsPending(true);
 
     fetch(url, {

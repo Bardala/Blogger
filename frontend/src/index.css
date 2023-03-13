@@ -7,6 +7,11 @@
   color: #333;
 }
 
+:root {
+  --primary: #1aac83;
+  --red: #e7195a;
+}
+
 /* navbar */
 .navbar {
   padding: 20px;
@@ -18,7 +23,7 @@
 }
 
 .navbar h1 {
-  color: #f1356d;
+  color: var(--primary);
 }
 
 .navbar .links {
@@ -32,7 +37,7 @@
 }
 
 .navbar a:hover {
-  color: #f1356d;
+  color: var(--primary);
   box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -40,6 +45,24 @@
   max-width: 600px;
   margin: 40px auto;
   padding: 20px;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+}
+
+nav a,
+button {
+  background: #fff;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-family: "Poppins";
+  cursor: pointer;
+  font-size: 1em;
+  margin-left: 10px;
 }
 
 /* blog previews / list */
@@ -56,7 +79,7 @@
 
 .blog-preview h2 {
   font-size: 20px;
-  color: #f1356d;
+  color: var(--primary);
   margin-bottom: 8px;
 }
 
@@ -78,7 +101,7 @@
 
 .blog-details h2 {
   font-size: 24px;
-  color: #f1356d;
+  color: var(--primary);
   margin-bottom: 8px;
 }
 
@@ -96,7 +119,7 @@
 }
 
 .blog-details button {
-  background: #f1356d;
+  background: var(--primary);
   color: #fff;
   border: 0;
   padding: 8px;
@@ -109,7 +132,8 @@
 }
 
 .blog-content button:hover {
-  box-shadow: 1px 3px 5px 10px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 1px 3px 5px 10px rgba(0, 0, 0, 0.1); */
+  background: #fa0000cb;
 }
 
 #read-blog {
@@ -122,14 +146,14 @@
 }
 
 .comments p {
-  color: #f1356d;
+  color: var(--primary);
   margin-top: 50px;
   margin-bottom: 5px;
 }
 
 .comment {
   padding: 10px;
-  border: 1px #f1356d;
+  border: 1px var(--primary);
 }
 
 .comment p {
@@ -139,8 +163,13 @@
   color: #4b1616;
 }
 
+.comment .comment-body:hover {
+  background: #fafafa;
+}
+
 .create-comment button:hover {
   box-shadow: 1px 3px 5px 2px rgba(0, 0, 0, 0.1);
+  background: #16e807;
 }
 
 .create-comment {
@@ -149,7 +178,7 @@
 
 .create-comment p {
   font-weight: bold;
-  color: #f1356d;
+  color: var(--primary);
 }
 
 .create-comment textarea {
@@ -163,7 +192,7 @@
 }
 
 .create-comment button {
-  background: #f1356d;
+  background: var(--primary);
   color: #fff;
   border: none;
   padding: 8px;
@@ -183,7 +212,7 @@
 
 .create h2 {
   font-size: 20px;
-  color: #f1356d;
+  color: var(--primary);
   margin-bottom: 30px;
 }
 
@@ -198,7 +227,7 @@
 }
 
 .create button {
-  background: #f1356d;
+  background: var(--primary);
   color: #fff;
   border: 0;
   padding: 8px;
@@ -215,7 +244,7 @@
 
 .not-found h2 {
   font-size: 20px;
-  color: #f1356d;
+  color: var(--primary);
   margin-bottom: 30px;
 }
 
@@ -225,5 +254,50 @@
 
 .not-found a {
   text-decoration: none;
-  color: #f1356d;
+  color: var(--primary);
+}
+
+/* auth forms */
+
+
+input {
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+form button {
+  background: var(--primary);
+  border: 0;
+  color: #fff;
+  padding: 10px;
+  font-family: "Poppins";
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+form.signup,
+form.login {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.error {
+  padding: 10px;
+  background: #ffefef;
+  border: 1px solid var(--red);
+  color: var(--red);
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+input.error {
+  border: 1px solid var(--red);
 }
