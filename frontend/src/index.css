@@ -30,14 +30,31 @@
   margin-left: auto;
 }
 
-.navbar a {
-  margin-left: 16px;
+.navbar a,
+button {
   text-decoration: none;
-  padding: 6px;
+  background: #fff;
+  /* color: var(--primary); */
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-family: "Poppins";
+  cursor: pointer;
+  font-size: 1em;
+  margin-left: 16px;
 }
+
+/* .navbar a,
+button {
+  padding: 6px;
+} */
 
 .navbar a:hover {
   color: var(--primary);
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar button:hover {
+  color: var(--red);
   box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -47,23 +64,7 @@
   padding: 20px;
 }
 
-nav {
-  display: flex;
-  align-items: center;
-}
 
-nav a,
-button {
-  background: #fff;
-  color: var(--primary);
-  border: 2px solid var(--primary);
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-family: "Poppins";
-  cursor: pointer;
-  font-size: 1em;
-  margin-left: 10px;
-}
 
 /* blog previews / list */
 .blog-preview {
@@ -188,7 +189,8 @@ button {
   border: 1px solid #fafafa;
   padding: 10px;
   border-style: double;
-  border-color: #f4f4f4;
+  border-color: var(--primary);
+  border-radius: 12px;
 }
 
 .create-comment button {
@@ -199,6 +201,10 @@ button {
 }
 
 /*Create Blog Page*/
+h4 {
+  color: var(--primary);
+}
+
 .create {
   max-width: 400px;
   margin: 0 auto;
@@ -222,8 +228,20 @@ button {
   padding: 6px 10px;
   margin: 10px 0;
   border: 1px solid #ddd;
+  border-radius: 8px;
+  border-color: var(--primary);
   box-sizing: border-box;
   display: block;
+}
+
+.create input:hover {
+  border-color: var(--primary);
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.create textarea:hover {
+  border-color: var(--primary);
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
 }
 
 .create button {

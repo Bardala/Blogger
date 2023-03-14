@@ -23,11 +23,54 @@ mongoose
   })
   .catch((error) => console.log(error));
 
+// Authentications
+app.post("/signup", async function signup(req, res) {
+  console.log("signup");
+  const { email, password } = req.body;
+  try {
+    const user = await User.signup(email, password);
+    const token = createToken(user._id);
+    res.status(200).json({ email, token });
+    console.log("Success signup");
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.post("/login", async function login(req, res) {
+  console.log("login");
+  const { email, password } = req.body;
+  try {
+    const user = await User.login(email, password);
+    const token = createToken(user._id);
+    res.status(200).json({ email, token });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// require Authentication
+app.use(async function requireAuth(req, res, next) {
+  const { authorization } = req.headers;
+  if (!authorization)
+    return res.status(401).json({ error: "Authorization token required" });
+  console.log(authorization);
+  const token = authorization.split(" ")[1];
+  try {
+    const { _id } = jwt.verify(token, process.env.SECRET);
+    req.user = await User.findOne({ _id }).select({ _id });
+    next();
+  } catch (error) {
+    res.status(400).json({ error: "Request is not authorized" });
+  }
+});
+
 // get all blogs
 app.get("/blogs", async function getAllBlogs(req, res) {
   console.log("get all blogs");
 
-  const blogs = await Blogs.find({}).sort({ createdAt: -1 });
+  const userId = req.user._id;
+  const blogs = await Blogs.find({ userId }).sort({ createdAt: -1 });
 
   res.status(200).json(blogs);
 });
@@ -39,7 +82,8 @@ app.post("/createBlog", async function createBlog(req, res) {
   if (!body || !title || !author)
     return res.status(400).json({ error: "Please fill all fields" });
   try {
-    const blog = await Blogs.create({ title, body, author });
+    const userId = req.user._id;
+    const blog = await Blogs.create({ title, body, author, userId });
     res.status(200).json(blog);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -51,6 +95,7 @@ app.get("/blogs/:id", async function getBlog(req, res) {
   console.log("get a blog");
 
   const { id } = req.params;
+  const userId = req.user._id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "no such blog" });
@@ -59,6 +104,10 @@ app.get("/blogs/:id", async function getBlog(req, res) {
   try {
     const blog = await Blogs.findById(id);
     if (!blog) return res.status(400).json({ error: "No such blog" });
+    if (blog.userId != userId)
+      return res
+        .status(400)
+        .json({ error: "You do not have the permission to access this data" });
     res.status(200).json(blog);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -112,32 +161,6 @@ app.get("/getComments", async function getComments(req, res) {
   try {
     const comments = await Comments.find({ blogId }).sort({ createdAt: -1 });
     res.status(200).json(comments);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-// Authentications
-app.post("/signup", async function signup(req, res) {
-  console.log("signup");
-  const { email, password } = req.body;
-  try {
-    const user = await User.signup(email, password);
-    const token = createToken(user._id);
-    res.status(200).json({ email, token });
-    console.log("Success signup");
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-app.post("/login", async function login(req, res) {
-  console.log("login");
-  const { email, password } = req.body;
-  try {
-    const user = await User.login(email, password);
-    const token = createToken(user._id);
-    res.status(200).json({ email, token });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

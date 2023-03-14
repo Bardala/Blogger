@@ -4,8 +4,11 @@ import CreateComment from "./CreateComment";
 import { useBlogContext } from "../hooks/useBlogContext";
 import { useCommentContext } from "../hooks/useCommentContext";
 import formatDistantToNow from "date-fns/formatDistanceToNow";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const BlogDetails = () => {
+  const { user } = useAuthContext();
+
   const nav = useNavigate();
   const { id } = useParams();
   const { blog, dispatch } = useBlogContext();
@@ -18,13 +21,24 @@ const BlogDetails = () => {
 
   useEffect(() => {
     const getBlog = async () => {
+      if (!user) {
+        setError("You must me logged in");
+        return;
+      }
       try {
         setIsPending(true);
-        const response = await fetch(blogsURL);
-        if (!response.ok) throw new Error(response.statusText);
-        else console.log("Response of getBlog");
+        const response = await fetch(blogsURL, {
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
         const data = await response.json();
-        dispatch({ type: "GET-BLOG", payload: data });
+        if (response.ok) {
+          dispatch({ type: "GET-BLOG", payload: data });
+          console.log("Response of getBlog");
+        } else {
+          setError(data.error);
+          console.log(data.error);
+        }
+
         setIsPending(false);
       } catch (error) {
         setError(error.message);
@@ -33,32 +47,45 @@ const BlogDetails = () => {
       }
     };
     getBlog();
-  }, [blogsURL, dispatch]);
+  }, [blogsURL, dispatch, user]);
 
   useEffect(() => {
     const getComments = async () => {
       const response = await fetch(commentsURL, {
         method: "GET",
         mode: "cors",
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
       });
       const data = await response.json();
-      if (response.ok) console.log("Response of getComments");
-      else return console.log(data.error);
-      dispatchComments({ type: "GET-COMMENTS", payload: data });
+      if (response.ok) {
+        dispatchComments({ type: "GET-COMMENTS", payload: data });
+        console.log("Response of getComments");
+      } else console.log(data.error);
     };
 
-    getComments();
-  }, [commentsURL, dispatchComments, id]);
+    if (!error) getComments();
+  }, [commentsURL, dispatchComments, id, user, error]);
 
-  const handleDelete = async () => {
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      setError("You must me logged in");
+      return;
+    }
     try {
       const response = await fetch(blogsURL, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
         mode: "cors",
       });
-      if (!response.ok) console.log(response.json().error);
-      else console.log("the blog is deleted");
+      const data = response.json();
+      if (response.ok) console.log("the blog is deleted");
+      else console.log(data.error);
     } catch (error) {
       console.log(error);
     } finally {
@@ -68,7 +95,7 @@ const BlogDetails = () => {
 
   return (
     <div className="blog-details">
-      {error && <p>{error}</p>}
+      {error && <p className="error">{error}</p>}
       {isPending && <p>Loading...</p>}
       {blog && (
         <div>

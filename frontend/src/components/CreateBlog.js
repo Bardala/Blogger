@@ -1,29 +1,45 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useAuthContext } from "../hooks/useAuthContext";
 const CreateBlog = () => {
+  const { user } = useAuthContext();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [author, setAuthor] = useState("");
+  const [error, setError] = useState(null);
   const blog = { title, body, author };
   const [isPending, setIsPending] = useState(false);
   const url = "http://localhost:4000/createBlog";
   const nav = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  useEffect(() => {
+    if (!user) {
+      setError("You must me logged in");
+      nav("/NotFound");
+      return;
+    }
+  }, [nav, user]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
     setIsPending(true);
 
     fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
       mode: "cors",
       body: JSON.stringify(blog),
-    }).then(() => {
-      setIsPending(false);
-      nav("/");
-      console.log("new blog added");
-    });
+    })
+      .then(() => {
+        setIsPending(false);
+        nav("/");
+        console.log("new blog added");
+      })
+      .catch((err) => setError(err));
   };
 
   return (
@@ -51,8 +67,8 @@ const CreateBlog = () => {
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
         ></textarea>
-        {!isPending && <button>Add Blog</button>}
-        {isPending && <button disabled>Adding Blog...</button>}
+        <button disabled={isPending}>Add Blog</button>
+        {error && <p className="error">{error}</p>}
       </form>
     </div>
   );
