@@ -200,6 +200,10 @@ button {
   padding: 8px;
 }
 
+.create-comment .error {
+  color: var(--red);
+}
+
 /*Create Blog Page*/
 h4 {
   color: var(--primary);

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import BlogList from "./BlogList";
+import BlogList from "../components/BlogList";
 import { useBlogContext } from "../hooks/useBlogContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 const Home = () => {
@@ -43,10 +43,12 @@ const Home = () => {
       {blogs?.length > 0 ? (
         <BlogList blogs={blogs} />
       ) : (
-        <div className="not-found">
-          <p>There isn't blogs</p>
-          <Link to="/createBlog">Click here to create a blog</Link>
-        </div>
+        !isPending && (
+          <div className="not-found">
+            <p>There isn't blogs</p>
+            <Link to="/createBlog">Click here to create a blog</Link>
+          </div>
+        )
       )}
     </div>
   );

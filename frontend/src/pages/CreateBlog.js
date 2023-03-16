@@ -1,45 +1,52 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 const CreateBlog = () => {
   const { user } = useAuthContext();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [author, setAuthor] = useState("");
   const [error, setError] = useState(null);
-  const blog = { title, body, author };
+  const blog = { title, body, author: user.username };
   const [isPending, setIsPending] = useState(false);
   const url = "http://localhost:4000/createBlog";
   const nav = useNavigate();
 
-  useEffect(() => {
-    if (!user) {
-      setError("You must me logged in");
-      nav("/NotFound");
-      return;
-    }
-  }, [nav, user]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
+    let emptyFields = [];
+    if (title.trim() === "") emptyFields.push("title");
+    if (body.trim() === "") emptyFields.push("body");
+    if (emptyFields.length > 0) {
+      setError(`Please fill : ${emptyFields.join(", ")}`);
+      setIsPending(false);
+      return;
+    }
 
     setIsPending(true);
+    const postBlog = async () => {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        mode: "cors",
+        body: JSON.stringify(blog),
+      });
+      const data = await res.json();
 
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
-      },
-      mode: "cors",
-      body: JSON.stringify(blog),
-    })
-      .then(() => {
+      if (res.ok) {
         setIsPending(false);
-        nav("/");
         console.log("new blog added");
-      })
-      .catch((err) => setError(err));
+        nav("/");
+      } else {
+        setError(data.error);
+        console.log(data.error);
+        setIsPending(false);
+      }
+    };
+
+    postBlog();
   };
 
   return (
@@ -49,23 +56,16 @@ const CreateBlog = () => {
         <label>Blog Title:</label>
         <input
           type="text"
-          required
+          // required
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
 
         <label>Blog body:</label>
         <textarea
-          required
+          // required
           value={body}
           onChange={(e) => setBody(e.target.value)}
-        ></textarea>
-
-        <label>Blog author:</label>
-        <textarea
-          required
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
         ></textarea>
         <button disabled={isPending}>Add Blog</button>
         {error && <p className="error">{error}</p>}

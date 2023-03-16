@@ -1,12 +1,12 @@
-import Home from "./components/Home";
+import Home from "./pages/Home";
 import Navbar from "./components/NavBar";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import BlogDetails from "./components/BlogDetails";
-import NotFound from "./components/NotFound";
-import CreateBlog from "./components/CreateBlog";
+import BlogDetails from "./pages/BlogDetails";
+import NotFound from "./pages/NotFound";
+import CreateBlog from "./pages/CreateBlog";
 import { useAuthContext } from "./hooks/useAuthContext";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 function App() {
   const { user } = useAuthContext();

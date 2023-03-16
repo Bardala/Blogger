@@ -1,8 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import CreateComment from "./CreateComment";
+import Comments from "../components/Comments";
 import { useBlogContext } from "../hooks/useBlogContext";
-import { useCommentContext } from "../hooks/useCommentContext";
 import formatDistantToNow from "date-fns/formatDistanceToNow";
 import { useAuthContext } from "../hooks/useAuthContext";
 
@@ -12,19 +11,12 @@ const BlogDetails = () => {
   const nav = useNavigate();
   const { id } = useParams();
   const { blog, dispatch } = useBlogContext();
-  const { comments, dispatchComments } = useCommentContext();
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState();
-
   const blogsURL = `http://localhost:4000/blogs/${id}`;
-  const commentsURL = `http://localhost:4000/getComments?blogId=${id}`;
 
   useEffect(() => {
     const getBlog = async () => {
-      if (!user) {
-        setError("You must me logged in");
-        return;
-      }
       try {
         setIsPending(true);
         const response = await fetch(blogsURL, {
@@ -38,8 +30,6 @@ const BlogDetails = () => {
           setError(data.error);
           console.log(data.error);
         }
-
-        setIsPending(false);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -48,25 +38,6 @@ const BlogDetails = () => {
     };
     getBlog();
   }, [blogsURL, dispatch, user]);
-
-  useEffect(() => {
-    const getComments = async () => {
-      const response = await fetch(commentsURL, {
-        method: "GET",
-        mode: "cors",
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-      const data = await response.json();
-      if (response.ok) {
-        dispatchComments({ type: "GET-COMMENTS", payload: data });
-        console.log("Response of getComments");
-      } else console.log(data.error);
-    };
-
-    if (!error) getComments();
-  }, [commentsURL, dispatchComments, id, user, error]);
 
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -115,24 +86,7 @@ const BlogDetails = () => {
             <button onClick={handleDelete}>Delete</button>
           </div>
 
-          <div className="blog-comments">
-            <CreateComment blogId={id} />
-
-            <div className="comments">
-              <p>Comments</p>
-              {comments &&
-                comments.map((comment) => (
-                  <div className="comment" key={comment._id}>
-                    <p className="comment-body">{comment.body}</p>
-                    <p className="created-at">
-                      {formatDistantToNow(new Date(comment.createdAt), {
-                        addSuffix: true,
-                      })}
-                    </p>
-                  </div>
-                ))}
-            </div>
-          </div>
+          <Comments blogId={id} />
         </div>
       )}
     </div>
