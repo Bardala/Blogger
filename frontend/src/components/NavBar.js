@@ -13,15 +13,15 @@ const Navbar = () => {
   };
 
   return (
-    <header class="navbar">
-      <div class="title-wrapper">
+    <header className="navbar">
+      <div className="title-wrapper">
         <>
           <h1>Blogs</h1>
-          {user && <h3 class="username">{user.username}</h3>}
+          {user && <h3 className="username">{user.username}</h3>}
         </>
       </div>
 
-      <nav class="links">
+      <nav className="links">
         {user ? (
           <div>
             <Link to="/">Home</Link>

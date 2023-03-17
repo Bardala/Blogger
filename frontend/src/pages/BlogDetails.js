@@ -13,6 +13,7 @@ const BlogDetails = () => {
   const { blog, dispatch } = useBlogContext();
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState();
+  const [owner, setOwner] = useState(false);
   const blogsURL = `http://localhost:4000/blogs/${id}`;
 
   useEffect(() => {
@@ -20,31 +21,36 @@ const BlogDetails = () => {
       try {
         setIsPending(true);
         const response = await fetch(blogsURL, {
-          headers: { Authorization: `Bearer ${user.token}` },
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
         });
         const data = await response.json();
         if (response.ok) {
           dispatch({ type: "GET-BLOG", payload: data });
-          console.log("Response of getBlog");
+          if (data.author === user.username) setOwner(true);
+          // console.log(data, user);
+          // console.log("Response of getBlog");
         } else {
           setError(data.error);
-          console.log(data.error);
+          // console.log(data.error);
         }
       } catch (error) {
-        setError(error.message);
+        setError("Connection Error: " + error.message);
       } finally {
         setIsPending(false);
       }
     };
-    getBlog();
+
+    if (user) getBlog();
   }, [blogsURL, dispatch, user]);
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    if (!user) {
-      setError("You must me logged in");
-      return;
-    }
+
     try {
       const response = await fetch(blogsURL, {
         method: "DELETE",
@@ -55,12 +61,15 @@ const BlogDetails = () => {
         mode: "cors",
       });
       const data = response.json();
-      if (response.ok) console.log("the blog is deleted");
-      else console.log(data.error);
+      if (response.ok) {
+        console.log("the blog is deleted");
+        nav("/");
+      } else {
+        setError(data.error);
+        console.log(data.error);
+      }
     } catch (error) {
-      console.log(error);
-    } finally {
-      nav("/");
+      setError("Connection Error: " + error.message);
     }
   };
 
@@ -83,10 +92,10 @@ const BlogDetails = () => {
                 })}
               </p>
             </article>
-            <button onClick={handleDelete}>Delete</button>
+            {owner && <button onClick={handleDelete}>Delete</button>}
           </div>
 
-          <Comments blogId={id} />
+          <Comments blogId={id} user={user} />
         </div>
       )}
     </div>

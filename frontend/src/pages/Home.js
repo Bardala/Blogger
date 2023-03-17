@@ -28,22 +28,24 @@ const Home = () => {
         const data = await response.json();
         dispatch({ type: "GET-ALL-BLOGS", payload: data });
       } catch (error) {
-        setError(error.message);
+        setError("Connection Error: " + error.message);
       } finally {
         setIsPending(false);
       }
     };
-    getBlogs();
+
+    if (user) getBlogs();
   }, [dispatch, url, user]);
 
   return (
     <div className="home">
-      {error && <p>{error}</p>}
+      {error && <p className="error">{error}</p>}
       {isPending && <p>Loading...</p>}
       {blogs?.length > 0 ? (
         <BlogList blogs={blogs} />
       ) : (
-        !isPending && (
+        !isPending &&
+        !error && (
           <div className="not-found">
             <p>There isn't blogs</p>
             <Link to="/createBlog">Click here to create a blog</Link>

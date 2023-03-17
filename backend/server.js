@@ -55,7 +55,7 @@ app.use(async function requireAuth(req, res, next) {
   const { authorization } = req.headers;
   if (!authorization)
     return res.status(401).json({ error: "Authorization token required" });
-  console.log(authorization);
+  // console.log(authorization);
   const token = authorization.split(" ")[1];
   try {
     const { _id } = jwt.verify(token, process.env.SECRET);
@@ -69,8 +69,7 @@ app.use(async function requireAuth(req, res, next) {
 // get all blogs
 app.get("/blogs", async function getAllBlogs(req, res) {
   console.log("get all blogs");
-
-  // make private and public blogs
+  // remember: make private and public blogs
   // const userId = req.user._id;
   const blogs = await Blogs.find({}).sort({ createdAt: -1 });
 
@@ -122,12 +121,17 @@ app.get("/blogs/:id", async function getBlog(req, res) {
 app.delete("/blogs/:id", async function deleteBlog(req, res) {
   console.log("delete a blog");
 
+  const userId = req.user._id;
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(400).json({ error: "Invalid id" });
 
   try {
-    const blog = await Blogs.findOneAndDelete({ _id: id });
+    const blog = await Blogs.findById(id);
+    if (blog.userId != userId)
+      return res.status(403).json({ error: "You do not have permission" });
+
+    await Blogs.findOneAndDelete({ _id: id });
     await Comments.deleteMany({ blogId: id });
     if (!blog)
       return res
