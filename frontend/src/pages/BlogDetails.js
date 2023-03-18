@@ -14,7 +14,7 @@ const BlogDetails = () => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState();
   const [owner, setOwner] = useState(false);
-  const blogsURL = `http://localhost:4000/blogs/${id}`;
+  const blogsURL = `http://localhost:4000/api/blogs/${id}`;
 
   useEffect(() => {
     const getBlog = async () => {

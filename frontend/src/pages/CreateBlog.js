@@ -7,7 +7,7 @@ const CreateBlog = () => {
   const [body, setBody] = useState("");
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
-  const url = "http://localhost:4000/createBlog";
+  const url = "http://localhost:4000/api/createBlog";
   const nav = useNavigate();
 
   const handleSubmit = (e) => {

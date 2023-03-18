@@ -11,8 +11,8 @@ const Comments = (props) => {
   const [isPending, setIsPending] = useState(false);
   const { comments, dispatchComments } = useCommentContext();
 
-  const url = `http://localhost:4000/createComment`;
-  const commentsURL = `http://localhost:4000/getComments?blogId=${blogId}`;
+  const url = `http://localhost:4000/api/createComment`;
+  const commentsURL = `http://localhost:4000/api/getComments?blogId=${blogId}`;
 
   useEffect(() => {
     const getComments = async () => {

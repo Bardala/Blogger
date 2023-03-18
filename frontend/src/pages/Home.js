@@ -8,7 +8,7 @@ const Home = () => {
   const [error, setError] = useState("");
   const [isPending, setIsPending] = useState(false);
   const { dispatch, blogs } = useBlogContext();
-  const url = "http://localhost:4000/blogs";
+  const url = "http://localhost:4000/api/blogs";
 
   useEffect(() => {
     const getBlogs = async () => {

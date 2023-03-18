@@ -6,7 +6,7 @@ export const useSignup = () => {
   const [error, setError] = useState();
   const [isPending, setIsPending] = useState(false);
   const { dispatch } = useAuthContext();
-  const url = "http://localhost:4000/signup";
+  const url = "http://localhost:4000/api/signup";
 
   const signup = async (username, email, password) => {
     setIsPending(true);
@@ -37,7 +37,7 @@ export const useLogin = () => {
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(null);
   const { dispatch } = useAuthContext();
-  const url = "http://localhost:4000/login";
+  const url = "http://localhost:4000/api/login";
 
   const login = async (email, password) => {
     setIsPending(true);
