@@ -23,7 +23,7 @@ const Home = () => {
           mode: "cors",
         });
         if (!response.ok) {
-          setError(response.statusText);
+          setError(response.error);
         }
         const data = await response.json();
         dispatch({ type: "GET-ALL-BLOGS", payload: data });

@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { useCommentContext } from "../context/CommentsContext";
-// import { useAuthContext } from "../hooks/useAuthContext";
 import formatDistantToNow from "date-fns/formatDistanceToNow";
 
 const Comments = (props) => {
-  // const { user } = useAuthContext();
   const { blogId, user } = props;
   const [commentBody, setCommentBody] = useState();
   const [error, setError] = useState(null);

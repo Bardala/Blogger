@@ -11,6 +11,26 @@ const getAllBlogs = async function (req, res) {
   res.status(200).json(blogs);
 };
 
+const getBlogsByUserId = async function (req, res) {
+  const userId = req.params.id;
+  console.log("userId", userId);
+  try {
+    const blogs = await Blogs.find({ userId });
+    res.status(200).json(blogs);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const getBlogsByUsername = async function (req, res) {
+  try {
+    const blogs = await Blogs.find({ author: req.params.username });
+    res.status(200).json(blogs);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 // post a blog
 const createBlog = async function (req, res) {
   const { title, body, author } = req.body;
@@ -82,4 +102,6 @@ module.exports = {
   createBlog,
   getBlog,
   deleteBlog,
+  getBlogsByUserId,
+  getBlogsByUsername,
 };
