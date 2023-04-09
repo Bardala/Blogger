@@ -7,7 +7,7 @@ import formatDistantToNow from "date-fns/formatDistanceToNow";
 const PersonalPage = () => {
   const { user } = useAuthContext();
   const [pageOwner, setPageOwner] = useState(null);
-  const { id } = useParams();
+  const { username } = useParams();
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
   const [blogs, setBlogs] = useState(null);
@@ -16,11 +16,14 @@ const PersonalPage = () => {
     const getUser = async () => {
       setIsPending(true);
       try {
-        const response = await fetch(`http://localhost:4000/api/users/${id}`, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
+        const response = await fetch(
+          `http://localhost:4000/api/users/${username}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
           },
-        });
+        );
         const data = await response.json();
         if (response.ok) {
           setPageOwner(data);
@@ -36,14 +39,14 @@ const PersonalPage = () => {
     };
 
     if (user) getUser();
-  }, [id, user]);
+  }, [username, user]);
 
   useEffect(() => {
     const getBlogs = async () => {
       setIsPending(true);
       try {
         const response = await fetch(
-          `http://localhost:4000/api/personalBlogs/${id}`,
+          `http://localhost:4000/api/personalBlogs/${username}`,
           {
             headers: {
               Authorization: `Bearer ${user.token}`,
@@ -64,7 +67,7 @@ const PersonalPage = () => {
     };
 
     if (user) getBlogs();
-  }, [id, user]);
+  }, [username, user]);
 
   return (
     <div>

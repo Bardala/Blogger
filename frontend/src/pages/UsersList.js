@@ -21,6 +21,7 @@ const UsersList = () => {
         const data = await response.json();
         if (response.ok) {
           setUsers(data);
+          console.log(data);
         } else {
           setError(response.statusText);
         }
@@ -43,7 +44,7 @@ const UsersList = () => {
           users &&
           users.map((u) => (
             <div key={u._id}>
-              <Link to={`/users/${u._id}`}>{u.username}</Link>
+              <Link to={`/users/${u.username}`}>{u.username}</Link>
             </div>
           ))
         )}

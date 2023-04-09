@@ -3,7 +3,7 @@ const {
   createBlog,
   getBlog,
   deleteBlog,
-  getBlogsByUserId,
+  // getBlogsByUserId,
   getBlogsByUsername,
 } = require("../controllers/blogsController");
 const express = require("express");
@@ -11,8 +11,8 @@ const router = express.Router();
 
 // get all blogs
 router.get("/blogs", getAllBlogs);
-router.get("/personalBlogs/:id", getBlogsByUserId);
-// router.get("/personalBlogs/:username", getBlogsByUsername);
+// router.get("/personalBlogs/:id", getBlogsByUserId);
+router.get("/personalBlogs/:username", getBlogsByUsername);
 // post a blog
 router.post("/createBlog", createBlog);
 // get a blog

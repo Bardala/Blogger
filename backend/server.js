@@ -8,6 +8,7 @@ const authRoutes = require("./routes/auth");
 const commentsRouts = require("./routes/comments");
 const blogRouts = require("./routes/blog");
 const userRoutes = require("./routes/user");
+const middleware = require("./routes/middleware");
 const app = express();
 
 mongoose
@@ -27,7 +28,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api", authRoutes);
-app.use(requireAuth);
+app.use(middleware);
 app.use("/api", blogRouts);
 app.use("/api", commentsRouts);
 app.use("/api", userRoutes);

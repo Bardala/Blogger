@@ -48,8 +48,6 @@ const createBlog = async function (req, res) {
 // get a blog
 const getBlog = async function (req, res) {
   const { id } = req.params;
-  // const userId = req.user._id;
-
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "no such blog" });
   }
@@ -58,7 +56,7 @@ const getBlog = async function (req, res) {
     const blog = await Blogs.findById(id);
     if (!blog) return res.status(400).json({ error: "No such blog" });
 
-    // make private and public blogs
+    // todo: make private and public blogs
     // if (blog.userId != userId)
     //   return res
     //     .status(403)

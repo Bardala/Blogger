@@ -30,7 +30,8 @@ const login = async function (req, res) {
 
 const getUsers = async (req, res) => {
   try {
-    const users = await User.find({});
+    // return users without password and updatedAt
+    const users = await User.find({}, "-password -updatedAt");
     res.status(200).json(users);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -39,7 +40,19 @@ const getUsers = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id, "-password -updatedAt");
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const getUserByUsername = async (req, res) => {
+  try {
+    const user = await User.findOne(
+      { username: req.params.username },
+      "-password, -updatedAt",
+    );
     res.status(200).json(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -51,4 +64,5 @@ module.exports = {
   login,
   getUsers,
   getUser,
+  getUserByUsername,
 };

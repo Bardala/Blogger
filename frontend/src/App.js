@@ -8,7 +8,7 @@ import { useAuthContext } from "./hooks/useAuthContext";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import UsersList from "./pages/UsersList";
-import PersonalPage from "./pages/Page";
+import PersonalPage from "./pages/UserPage";
 
 function App() {
   const { user } = useAuthContext();
@@ -33,7 +33,7 @@ function App() {
           <Route path="/createBlog" element={<CreateBlog />} />
           <Route path="/blogs/:id" element={<BlogDetails />} />
           <Route path="/users" element={<UsersList />} />
-          <Route path="/users/:id" element={<PersonalPage />} />
+          <Route path="/users/:username" element={<PersonalPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

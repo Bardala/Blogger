@@ -17,14 +17,14 @@ const Navbar = () => {
       <div className="title-wrapper">
         <>
           <h1>Blogs</h1>
-          {user && <h3>{user.username}</h3>}
+          {user && <Link to={`/users/${user.username}`}>{user.username}</Link>}
         </>
       </div>
 
       <nav className="links">
         {user ? (
           <div>
-            <Link to={`/users`}>users</Link>
+            <Link to="/users">users</Link>
             <Link to="/">Home</Link>
             <Link to="/createBlog">New Blog</Link>
             <button onClick={handleClick}>logout</button>
