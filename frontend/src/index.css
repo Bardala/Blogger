@@ -212,7 +212,6 @@ h4 {
 .create {
   max-width: 400px;
   margin: 0 auto;
-  text-align: center;
 }
 
 .create label {
@@ -280,7 +279,6 @@ h4 {
 }
 
 /* auth forms */
-
 
 input {
   padding: 10px;

@@ -4,6 +4,7 @@ import Comments from "../components/Comments";
 import { useBlogContext } from "../hooks/useBlogContext";
 import formatDistantToNow from "date-fns/formatDistanceToNow";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 const BlogDetails = () => {
   const { user } = useAuthContext();
@@ -85,7 +86,7 @@ const BlogDetails = () => {
               <div>
                 Written by <strong>{blog.author}</strong>
               </div>
-              <p className="blog-body">{blog.body}</p>
+              <ReactMarkdown className="blog-body">{blog.body}</ReactMarkdown>
               <p className="created-at">
                 {formatDistantToNow(new Date(blog.createdAt), {
                   addSuffix: true,

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
+import ReactMarkdown from "react-markdown";
+
 const CreateBlog = () => {
   const { user } = useAuthContext();
   const [title, setTitle] = useState("");
@@ -57,6 +59,7 @@ const CreateBlog = () => {
       <h4>Add a New Blog</h4>
       <form onSubmit={handleSubmit}>
         <label>Blog Title:</label>
+
         <input
           type="text"
           // required
@@ -65,11 +68,13 @@ const CreateBlog = () => {
         />
 
         <label>Blog body:</label>
+        <ReactMarkdown>{body}</ReactMarkdown>
+
         <textarea
-          // required
           value={body}
           onChange={(e) => setBody(e.target.value)}
         ></textarea>
+
         <button disabled={isPending}>Add Blog</button>
         {error && <p className="error">{error}</p>}
       </form>

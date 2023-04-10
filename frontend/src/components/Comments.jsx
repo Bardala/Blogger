@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useCommentContext } from "../context/CommentsContext";
 import formatDistantToNow from "date-fns/formatDistanceToNow";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 const Comments = (props) => {
   const { blogId, user } = props;
@@ -42,7 +43,7 @@ const Comments = (props) => {
 
     if (commentBody.trim() === "") {
       setError(
-        "Please fill the comment field, you can't post an empty comment"
+        "Please fill the comment field, you can't post an empty comment",
       );
       setCommentBody("");
       setIsPending(false);
@@ -108,7 +109,9 @@ const Comments = (props) => {
         {comments &&
           comments.map((comment) => (
             <div className="comment" key={comment._id}>
-              <p className="comment-body">{comment.body}</p>
+              <ReactMarkdown className="comment-body">
+                {comment.body}
+              </ReactMarkdown>
               <p className="comment-author">{comment.author}</p>
               <p className="created-at">
                 {formatDistantToNow(new Date(comment.createdAt), {

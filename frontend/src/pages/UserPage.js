@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import formatDistantToNow from "date-fns/formatDistanceToNow";
+import BlogList from "../components/BlogList";
 
 const PersonalPage = () => {
   const { user } = useAuthContext();
@@ -81,24 +82,22 @@ const PersonalPage = () => {
             <p>username: {pageOwner.username}</p>
             <p>email: {pageOwner.email}</p>
           </div>
+
           <div>
             {error && <div className="error">{error}</div>}
             {isPending && <p>Loading...</p>}
             <h2>blogs</h2>
             <div>
-              {blogs &&
-                blogs.map((blog) => (
-                  <div key={blog._id}>
-                    <Link to={`/blogs/${blog._id}`}>
-                      <h2>{blog.title}</h2>
-                      <p className="created-at">
-                        {formatDistantToNow(new Date(blog.createdAt), {
-                          addSuffix: true,
-                        })}
-                      </p>
-                    </Link>
+              {blogs?.length > 0 ? (
+                <BlogList blogs={blogs} />
+              ) : (
+                !isPending &&
+                !error && (
+                  <div className="not-found">
+                    <p>There isn't blogs</p>
                   </div>
-                ))}
+                )
+              )}
             </div>
           </div>
         </div>
