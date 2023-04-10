@@ -15,7 +15,7 @@ const getBlogsByUserId = async function (req, res) {
   const userId = req.params.id;
   console.log("userId", userId);
   try {
-    const blogs = await Blogs.find({ userId });
+    const blogs = await Blogs.find({ userId }).sort({ createdAt: -1 });
     res.status(200).json(blogs);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -24,7 +24,9 @@ const getBlogsByUserId = async function (req, res) {
 
 const getBlogsByUsername = async function (req, res) {
   try {
-    const blogs = await Blogs.find({ author: req.params.username });
+    const blogs = await Blogs.find({ author: req.params.username }).sort({
+      createdAt: -1,
+    });
     res.status(200).json(blogs);
   } catch (error) {
     res.status(400).json({ error: error.message });
