@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Comments from "../components/Comments";
 import { useBlogContext } from "../hooks/useBlogContext";
@@ -83,8 +83,11 @@ const BlogDetails = () => {
           <div className="blog-content">
             <article>
               <h2>{blog.title}</h2>
-              <div>
-                Written by <strong>{blog.author}</strong>
+              <div className="author-name">
+                Written by{" "}
+                <Link to={`/users/${blog.author}`}>
+                  <strong>{blog.author}</strong>
+                </Link>
               </div>
               <ReactMarkdown className="blog-body">{blog.body}</ReactMarkdown>
               <p className="created-at">

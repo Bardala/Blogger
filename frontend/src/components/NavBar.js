@@ -17,7 +17,11 @@ const Navbar = () => {
       <div className="title-wrapper">
         <>
           <h1>Blogs</h1>
-          {user && <Link to={`/users/${user.username}`}>{user.username}</Link>}
+          {user && (
+            <Link to={`/users/${user.username}`} className="username">
+              {user.username}
+            </Link>
+          )}
         </>
       </div>
 

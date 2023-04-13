@@ -53,6 +53,10 @@ button {
   box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
 }
 
+.navbar a .username {
+  font-weight: bold;
+}
+
 .navbar button:hover {
   color: var(--red);
   box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
@@ -109,6 +113,11 @@ button {
 .blog-details div {
   margin: 20px 0;
   color: #000;
+}
+
+.blog-details a {
+  text-decoration: none;
+  color: var(--primary);
 }
 
 .blog-details .blog-body {
