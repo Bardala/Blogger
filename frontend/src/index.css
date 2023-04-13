@@ -321,3 +321,55 @@ form.login {
 input.error {
   border: 1px solid var(--red);
 }
+
+/* user list */
+.user-list {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.user-list h2 {
+  font-size: 20px;
+  color: var(--primary);
+  margin-bottom: 30px;
+}
+
+.user-list li {
+  padding: 10px;
+  border: 1px #ddd;
+  border-radius: 4px;
+  /* margin: 10px 0; */
+  cursor: pointer;
+  list-style: none;
+  margin-left: 88.8px;
+  margin-right: 88.8px;
+}
+
+.user-list li:hover {
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+  /* background: #fafafa; */
+}
+
+.user-list li a {
+  text-decoration: none;
+  color: var(--primary);
+}
+
+/* user profile */
+.user-profile {
+  /* max-width: 400px; */
+  margin: 0 auto;
+}
+
+.user-profile h2 {
+  font-size: 20px;
+  color: #0a684e;
+  margin-bottom: 30px;
+}
+
+.user-profile .user-information {
+  padding: 10px;
+  border: 1px #ddd;
+  border-radius: 4px;
+  margin: 10px 0;
+}

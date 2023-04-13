@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
-import ReactMarkdown from "react-markdown";
+// import ReactMarkdown from "react-markdown";
+import Markdown from "markdown-to-jsx";
 
 const CreateBlog = () => {
   const { user } = useAuthContext();
@@ -68,7 +69,7 @@ const CreateBlog = () => {
         />
 
         <label>Blog body:</label>
-        <ReactMarkdown>{body}</ReactMarkdown>
+        <Markdown>{body}</Markdown>
 
         <textarea
           value={body}

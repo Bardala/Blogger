@@ -35,7 +35,8 @@ const UsersList = () => {
   }, [user]);
 
   return (
-    <div>
+    <div className="user-list">
+      <h2>List of users</h2>
       {error && <div className="error">error</div>}
       <ul>
         {isPending ? (
@@ -43,9 +44,9 @@ const UsersList = () => {
         ) : (
           users &&
           users.map((u) => (
-            <div key={u._id}>
+            <li key={u._id}>
               <Link to={`/users/${u.username}`}>{u.username}</Link>
-            </div>
+            </li>
           ))
         )}
       </ul>

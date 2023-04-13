@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import formatDistantToNow from "date-fns/formatDistanceToNow";
 import BlogList from "../components/BlogList";
@@ -71,16 +70,22 @@ const PersonalPage = () => {
   }, [username, user]);
 
   return (
-    <div>
-      {isPending && <p>Loading...</p>}
+    <>
+      {isPending && <p className="loading">Loading...</p>}
       {error && <div className="error">{error}</div>}
       {pageOwner && (
-        <div>
-          <h1>Personal Page</h1>
+        <div className="user-profile">
+          <h1>{pageOwner.username} Page</h1>
           <div className="user-information">
             <h2>user information</h2>
             <p>username: {pageOwner.username}</p>
             <p>email: {pageOwner.email}</p>
+            <p>
+              From{" "}
+              {formatDistantToNow(new Date(pageOwner.createdAt), {
+                addSuffix: true,
+              })}
+            </p>
           </div>
 
           <div>
@@ -102,7 +107,7 @@ const PersonalPage = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
