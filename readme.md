@@ -11,7 +11,7 @@ Blogger is a full-stack web application that allows users to create and share bl
 
 ## Sign up page
 
-<img src="./web-cap/Signup.png" width="500" height="250" alt="Sign up" title="Sign up page">
+<img src="./web-cap/Signup.png" alt="Sign up" title="Sign up page">
 
 - Sign up with email, name and password
 - you should enter a valid email address
@@ -20,14 +20,14 @@ Blogger is a full-stack web application that allows users to create and share bl
 
 ## Home page
 
-<img src="./web-cap/Home.png" width="500" height="250" alt="Blogs list" title="Home page">
+<img src="./web-cap/Home.png" alt="Blogs list" title="Home page">
 
 - List of all posts with their title, date of creation and number of comments
 - Click on the title of the post to see the post detail page
 
 ## Create blog page
 
-<img src="./web-cap/AddBlog.png" width="500" height="250" alt="Add blog" title="Create Blog">
+<img src="./web-cap/AddBlog.png" alt="Add blog" title="Create Blog">
 
 - Create a new blog with title and body
 - you should enter all fields
@@ -37,7 +37,7 @@ Blogger is a full-stack web application that allows users to create and share bl
 
 ## Blog detail page
 
-<img src="./web-cap/BlogPreview.png" width="500" height="250" alt="Blog detail" title="Blog Preview">
+<img src="./web-cap/BlogPreview.png" alt="Blog detail" title="Blog Preview">
 
 - Title, author, date of creation, number of comments and content
 - Click on the author to see his profile page
@@ -57,21 +57,21 @@ Blogger is a full-stack web application that allows users to create and share bl
 
 ## List of users page
 
-<img src="./web-cap/ListOfUsers.png" width="500" height="250" alt="List of users" title="List of users">
+<img src="./web-cap/ListOfUsers.png" alt="List of users" title="List of users">
 
 - List of all users with their email address and name and the date of registration
 - Click on the name of the user to see his profile page
 
 ## User profile page
 
-<img src="./web-cap/UserPage.png" width="500" height="250" alt="User page" title="User page">
+<img src="./web-cap/UserPage.png" alt="User page" title="User page">
 
 - Name, email address, date of registration and list of all posts with their title, date of creation and number of comments
 - Click on the title of the post to see the post detail page
 
 ## Login page
 
-<img src="./web-cap/Login.png" width="500" height="250" alt="Login" title="Login">
+<img src="./web-cap/Login.png" alt="Login" title="Login">
 
 - Login with email and password
 - you should enter a valid email address
@@ -79,7 +79,9 @@ Blogger is a full-stack web application that allows users to create and share bl
 
 ## Not found page
 
-<img src="./web-cap/NotFound.png" width="500" height="250" alt="Login" title="Login">
+<img src="./web-cap/NotFound.png" alt="Login" title="Login">
+
+- If you enter a wrong url, you will be redirected to this page
 
 ## Usage
 
