@@ -8,6 +8,7 @@ Blogger is a full-stack web application that allows users to create and share bl
 - Post creation, editing and deletion with CRUD operations
 - Comment creation, editing and deletion with CRUD operations
 - Markdown support for posts and comments with React Markdown
+- Error handling with custom error messages
 
 ## Sign up page
 
