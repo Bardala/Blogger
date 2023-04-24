@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import formatDistantToNow from "date-fns/formatDistanceToNow";
 
 const BlogList = ({ blogs }) => {
-  console.log(blogs);
   return (
     <div className="blog-list">
       {blogs.map((blog) => (
