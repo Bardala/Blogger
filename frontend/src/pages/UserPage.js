@@ -1,78 +1,22 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useAuthContext } from "../hooks/useAuthContext";
 import formatDistantToNow from "date-fns/formatDistanceToNow";
 import BlogList from "../components/BlogList";
+import { useGetAllBlogs } from "../hooks/blogsApis";
+import { useGetUser } from "../hooks/userApis";
 
 const PersonalPage = () => {
-  const { user } = useAuthContext();
-  const [pageOwner, setPageOwner] = useState(null);
   const { username } = useParams();
-  const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState(null);
-  const [blogs, setBlogs] = useState(null);
-
-  useEffect(() => {
-    const getUser = async () => {
-      setIsPending(true);
-      try {
-        const response = await fetch(
-          `http://localhost:4000/api/users/${username}`,
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          },
-        );
-        const data = await response.json();
-        if (response.ok) {
-          setPageOwner(data);
-          console.log(data);
-        } else {
-          setError(data.error);
-          console.log(data);
-        }
-      } catch (error) {
-        setError(error.message);
-      }
-      setIsPending(false);
-    };
-
-    if (user) getUser();
-  }, [username, user]);
-
-  useEffect(() => {
-    const getBlogs = async () => {
-      setIsPending(true);
-      try {
-        const response = await fetch(
-          `http://localhost:4000/api/personalBlogs/${username}`,
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          },
-        );
-        const data = await response.json();
-        if (response.ok) {
-          setBlogs(data);
-          console.log("blogs", data);
-        } else {
-          setError(data.error);
-        }
-      } catch (error) {
-        setError(error.message);
-      }
-      setIsPending(false);
-    };
-
-    if (user) getBlogs();
-  }, [username, user]);
+  const { error, blogs, isPending } = useGetAllBlogs(username);
+  const {
+    error: getUserError,
+    isPending: getUserPending,
+    pageOwner,
+  } = useGetUser(username);
 
   return (
     <>
-      {isPending && <p className="loading">Loading...</p>}
-      {error && <div className="error">{error}</div>}
+      {getUserPending && <p className="loading">Loading...</p>}
+      {getUserError && <div className="error">{error}</div>}
       {pageOwner && (
         <div className="user-profile">
           <h1>{pageOwner.username} Page</h1>

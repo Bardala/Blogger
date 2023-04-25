@@ -1,38 +1,8 @@
 import { Link } from "react-router-dom";
-import { useAuthContext } from "../hooks/useAuthContext";
-
-import { useEffect, useState } from "react";
+import { useGetAllUsers } from "../hooks/userApis";
 
 const UsersList = () => {
-  const { user } = useAuthContext();
-  const [users, setUsers] = useState(null);
-  const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const getUsers = async () => {
-      setIsPending(true);
-      try {
-        const response = await fetch("http://localhost:4000/api/users", {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setUsers(data);
-          console.log(data);
-        } else {
-          setError(response.statusText);
-        }
-      } catch (error) {
-        setError(error.message);
-      }
-      setIsPending(false);
-    };
-
-    if (user) getUsers();
-  }, [user]);
+  const { users, isPending, error } = useGetAllUsers();
 
   return (
     <div className="user-list">

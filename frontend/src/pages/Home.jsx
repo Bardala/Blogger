@@ -1,41 +1,9 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import BlogList from "../components/BlogList";
-import { useBlogContext } from "../hooks/useBlogContext";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useGetAllBlogs } from "../hooks/blogsApis";
+
 const Home = () => {
-  const { user } = useAuthContext();
-  const [error, setError] = useState("");
-  const [isPending, setIsPending] = useState(false);
-  const { dispatch, blogs } = useBlogContext();
-  const url = "http://localhost:4000/api/blogs";
-
-  useEffect(() => {
-    const getBlogs = async () => {
-      if (!user) {
-        setError("You must me logged in");
-        return;
-      }
-      setIsPending(true);
-      try {
-        const response = await fetch(url, {
-          headers: { Authorization: `Bearer ${user.token}` },
-          mode: "cors",
-        });
-        if (!response.ok) {
-          setError(response.error);
-        }
-        const data = await response.json();
-        dispatch({ type: "GET-ALL-BLOGS", payload: data });
-      } catch (error) {
-        setError("Connection Error: " + error.message);
-      } finally {
-        setIsPending(false);
-      }
-    };
-
-    if (user) getBlogs();
-  }, [dispatch, url, user]);
+  const { blogs, error, isPending } = useGetAllBlogs();
 
   return (
     <div className="home">

@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useReducer } from "react";
 
 export const CommentContext = createContext();
 
@@ -23,13 +23,4 @@ export const CommentContextProvider = ({ children }) => {
       {children}
     </CommentContext.Provider>
   );
-};
-
-export const useCommentContext = () => {
-  const context = useContext(CommentContext);
-
-  if (!context)
-    throw Error("useCommentContext must be used in CommentContextProvider");
-
-  return context;
 };

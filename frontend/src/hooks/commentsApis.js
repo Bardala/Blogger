@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
+import { useCommentContext } from "./useCommentContext";
 
 export const useGetComments = (blogId, user) => {
-  const [comments, setComments] = useState([]);
+  const { dispatchComments, comments } = useCommentContext();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,7 +23,7 @@ export const useGetComments = (blogId, user) => {
 
         const data = await response.json();
         if (response.ok) {
-          setComments(data);
+          dispatchComments({ type: "GET-COMMENTS", payload: data });
         } else {
           setError(data.error);
         }
@@ -35,15 +36,16 @@ export const useGetComments = (blogId, user) => {
     if (user) {
       fetchComments();
     }
-  }, [blogId, user]);
+  }, [blogId, dispatchComments, user]);
 
-  return { comments, error, isLoading };
+  return { error, isLoading, comments };
 };
 
 export const useCreateComment = (blogId, user) => {
   const [commentBody, setCommentBody] = useState("");
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
+  const { dispatchComments } = useCommentContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,6 +80,7 @@ export const useCreateComment = (blogId, user) => {
 
       if (response.ok) {
         setCommentBody("");
+        dispatchComments({ type: "CREATE-COMMENT", payload: data });
       } else {
         setError(data.error);
       }

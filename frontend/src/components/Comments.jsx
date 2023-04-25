@@ -1,10 +1,11 @@
 import formatDistantToNow from "date-fns/formatDistanceToNow";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { useCreateComment, useGetComments } from "../hooks/commentsHooks";
+import { useCreateComment, useGetComments } from "../hooks/commentsApis";
 
 const Comments = (props) => {
   const { blogId, user } = props;
   const { comments, error, isLoading } = useGetComments(blogId, user);
+
   const {
     commentBody,
     setCommentBody,
@@ -34,7 +35,7 @@ const Comments = (props) => {
         {isLoading ? (
           <p>Loading comments...</p>
         ) : (
-          comments.map((comment) => (
+          comments?.map((comment) => (
             <div className="comment" key={comment._id}>
               <ReactMarkdown className="comment-body">
                 {comment.body}
