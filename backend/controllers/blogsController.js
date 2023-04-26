@@ -5,10 +5,15 @@ const mongoose = require("mongoose");
 // get all blogs
 const getAllBlogs = async function (req, res) {
   // remember: make private and public blogs
-  // const userId = req.user._id;
-  const blogs = await Blogs.find({}).sort({ createdAt: -1 });
 
-  res.status(200).json(blogs);
+  const blogs = await Blogs.find({}).sort({ createdAt: -1 });
+  const blogsWithComments = await Promise.all(
+    blogs.map(async (blog) => {
+      const comments = await Comments.find({ blogId: blog._id });
+      return { ...blog.toObject(), comments };
+    }),
+  );
+  res.status(200).json(blogsWithComments);
 };
 
 const getBlogsByUserId = async function (req, res) {
@@ -16,7 +21,14 @@ const getBlogsByUserId = async function (req, res) {
   console.log("userId", userId);
   try {
     const blogs = await Blogs.find({ userId }).sort({ createdAt: -1 });
-    res.status(200).json(blogs);
+    const blogsWithComments = await Promise.all(
+      blogs.map(async (blog) => {
+        const comments = await Comments.find({ blogId: blog._id });
+        return { ...blog.toObject(), comments };
+      }),
+    );
+
+    res.status(200).json(blogsWithComments);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -27,7 +39,14 @@ const getBlogsByUsername = async function (req, res) {
     const blogs = await Blogs.find({ author: req.params.username }).sort({
       createdAt: -1,
     });
-    res.status(200).json(blogs);
+    const blogsWithComments = await Promise.all(
+      blogs.map(async (blog) => {
+        const comments = await Comments.find({ blogId: blog._id });
+        return { ...blog.toObject(), comments };
+      }),
+    );
+
+    res.status(200).json(blogsWithComments);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -57,13 +76,13 @@ const getBlog = async function (req, res) {
   try {
     const blog = await Blogs.findById(id);
     if (!blog) return res.status(400).json({ error: "No such blog" });
-
+    const comments = await Comments.find({ blogId: blog._id });
+    res.status(200).json({ ...blog.toObject(), comments });
     // todo: make private and public blogs
     // if (blog.userId != userId)
     //   return res
     //     .status(403)
     //     .json({ error: "You do not have the permission to access this data" });
-    res.status(200).json(blog);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

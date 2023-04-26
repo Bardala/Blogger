@@ -18,8 +18,13 @@ const blogSchema = new Schema(
       type: String,
       required: true,
     },
+    // state:{
+    //   type: String,
+    //   required: true,
+    // },
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-module.exports = mongoose.model("Blogs", blogSchema);
+module.exports = mongoose.model("Blog", blogSchema);

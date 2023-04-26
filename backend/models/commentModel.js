@@ -7,7 +7,8 @@ const commentSchema = new Schema(
       required: true,
     },
     blogId: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "Blog",
       required: true,
     },
     author: {
@@ -15,6 +16,7 @@ const commentSchema = new Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
+
 module.exports = mongoose.model("Comment", commentSchema);
