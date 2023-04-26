@@ -13,9 +13,15 @@ const UsersList = () => {
           <p>Loading...</p>
         ) : (
           users &&
-          users.map((u) => (
-            <li key={u._id}>
-              <Link to={`/users/${u.username}`}>{u.username}</Link>
+          users.map((user) => (
+            <li key={user._id}>
+              <Link to={`/users/${user.username}`}>{user.username}</Link>
+              <div className="counts-container">
+                <p className="blogs-count">{user.blogs.length} blogs</p>
+                <p className="comments-count">
+                  {user.comments.length} comments
+                </p>
+              </div>
             </li>
           ))
         )}

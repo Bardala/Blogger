@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import formatDistantToNow from "date-fns/formatDistanceToNow";
 import BlogList from "../components/BlogList";
-import { useGetAllBlogs } from "../hooks/blogsApis";
+import { useGetUserBlogs } from "../hooks/blogsApis";
 import { useGetUser } from "../hooks/userApis";
 
 const PersonalPage = () => {
   const { username } = useParams();
-  const { error, blogs, isPending } = useGetAllBlogs(username);
+  const { error, blogs, isPending } = useGetUserBlogs(username);
   const {
     error: getUserError,
     isPending: getUserPending,
@@ -21,10 +21,11 @@ const PersonalPage = () => {
         <div className="user-profile">
           <h1>{pageOwner.username} Page</h1>
           <div className="user-information">
-            <h2>user information</h2>
+            <h2>{pageOwner.username} card</h2>
             <p>username: {pageOwner.username}</p>
             <p>email: {pageOwner.email}</p>
             <p>number of blogs: {blogs?.length}</p>
+            <p>number of comments: {pageOwner.comments.length}</p>
             <p>
               From{" "}
               {formatDistantToNow(new Date(pageOwner.createdAt), {

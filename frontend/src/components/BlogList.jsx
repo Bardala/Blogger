@@ -26,13 +26,14 @@ const BlogList = ({ blogs }) => {
     <div className="blog-list">
       {blogs.map((blog) => (
         <div className="blog-preview" key={blog._id}>
-          <Link to={`/blogs/${blog._id}`}>
+          <Link to={`/blogs/${blog._id}`} className="blog-link">
             <div className="blog-header">
               <h2>{blog.title}</h2>
               <div className="blog-meta">
                 <p className="author">
                   By <strong>{blog.author}</strong>
                 </p>
+                <Link to={`/blogs/${blog._id}`} className="blog-link" />
                 <p className="comments-count">{formateComments(blog)}</p>
                 <p className="created-at">
                   {formatDistanceToNow(new Date(blog.createdAt), {
