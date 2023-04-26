@@ -3,16 +3,14 @@ import { useGetAllUsers } from "../hooks/userApis";
 
 const UsersList = () => {
   const { users, isPending, error } = useGetAllUsers();
+  if (isPending) return <p className="loading">Loading...</p>;
 
   return (
     <div className="user-list">
       <h2>List of users</h2>
       {error && <div className="error">error</div>}
       <ul>
-        {isPending ? (
-          <p>Loading...</p>
-        ) : (
-          users &&
+        {users &&
           users.map((user) => (
             <li key={user._id}>
               <Link to={`/users/${user.username}`}>{user.username}</Link>
@@ -23,8 +21,7 @@ const UsersList = () => {
                 </p>
               </div>
             </li>
-          ))
-        )}
+          ))}
       </ul>
     </div>
   );

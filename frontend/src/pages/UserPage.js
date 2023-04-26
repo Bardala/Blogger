@@ -13,9 +13,10 @@ const PersonalPage = () => {
     pageOwner,
   } = useGetUser(username);
 
+  if (getUserPending) return <p className="loading">Loading...</p>;
+
   return (
     <>
-      {getUserPending && <p className="loading">Loading...</p>}
       {getUserError && <div className="error">{error}</div>}
       {pageOwner && (
         <div className="user-profile">

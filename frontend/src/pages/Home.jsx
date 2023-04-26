@@ -4,11 +4,11 @@ import { useGetAllBlogs } from "../hooks/blogsApis";
 
 const Home = () => {
   const { blogs, error, isPending } = useGetAllBlogs();
+  if (isPending) return <p>Loading...</p>;
 
   return (
     <div className="home">
       {error && <p className="error">{error}</p>}
-      {isPending && <p>Loading...</p>}
       {blogs?.length > 0 ? (
         <BlogList blogs={blogs} />
       ) : (

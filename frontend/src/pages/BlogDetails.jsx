@@ -10,11 +10,11 @@ const BlogDetails = () => {
   const { id } = useParams();
   const { owner, isPending, error, blog } = useGetBlog(id, user);
   const { error: deleteError, handleDelete } = useDeleteBlog(id, user);
+  if (isPending) return <p className="loading">Loading...</p>;
 
   return (
     <div className="blog-details">
       {error && <p className="error">{error}</p>}
-      {isPending && <p>Loading...</p>}
       {blog && (
         <div>
           <div className="blog-content">
