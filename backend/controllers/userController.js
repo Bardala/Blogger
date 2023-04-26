@@ -1,10 +1,19 @@
 require("dotenv").config();
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
-
+const Blogs = require("../models/blogModel");
+const Comments = require("../models/commentModel");
+// helper functions
 const createToken = (_id) =>
   jwt.sign({ _id }, process.env.SECRET, { expiresIn: "3d" });
 
+async function getBlogsAndComments(user) {
+  const blogs = await Blogs.find({ userId: user._id });
+  const comments = await Comments.find({ author: user.username });
+  return { ...user.toObject(), blogs, comments };
+}
+
+// controllers
 const signup = async function (req, res) {
   const { email, password, username } = req.body;
   try {
@@ -30,9 +39,16 @@ const login = async function (req, res) {
 
 const getUsers = async (req, res) => {
   try {
-    // return users without password and updatedAt
     const users = await User.find({}, "-password -updatedAt");
-    res.status(200).json(users);
+
+    const usersWithActivities = await Promise.all(
+      users.map((user) => {
+        console.log(user);
+        return getBlogsAndComments(user);
+      }),
+    );
+
+    res.status(200).json(usersWithActivities);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -44,8 +60,14 @@ const getUserByUsername = async (req, res) => {
       { username: req.params.username },
       "-password -updatedAt",
     );
-    res.status(200).json(user);
+    console.log(user);
+
+    const usersWithActivities = await getBlogsAndComments(user);
+
+    console.log(usersWithActivities);
+    res.status(200).json(usersWithActivities);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: error.message });
   }
 };

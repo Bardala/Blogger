@@ -77,12 +77,9 @@ const getBlog = async function (req, res) {
     const blog = await Blogs.findById(id);
     if (!blog) return res.status(400).json({ error: "No such blog" });
     const comments = await Comments.find({ blogId: blog._id });
-    res.status(200).json({ ...blog.toObject(), comments });
+    const blogWithComments = { ...blog.toObject(), comments };
+    res.status(200).json(blogWithComments);
     // todo: make private and public blogs
-    // if (blog.userId != userId)
-    //   return res
-    //     .status(403)
-    //     .json({ error: "You do not have the permission to access this data" });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
