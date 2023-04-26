@@ -27,11 +27,17 @@ const BlogDetails = () => {
                 </Link>
               </div>
               <ReactMarkdown className="blog-body">{blog.body}</ReactMarkdown>
-              <p className="created-at">
-                {formatDistantToNow(new Date(blog.createdAt), {
-                  addSuffix: true,
-                })}
-              </p>
+              <div className="blog-meta">
+                <p className="created-at">
+                  {formatDistantToNow(new Date(blog.createdAt), {
+                    addSuffix: true,
+                  })}
+                </p>
+                <p className="comments-counts">
+                  {" "}
+                  {blog.comments.length} comments
+                </p>
+              </div>
             </article>
             {owner && <button onClick={handleDelete}>Delete</button>}
             {deleteError && <p className="error">{deleteError}</p>}

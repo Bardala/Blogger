@@ -111,8 +111,44 @@ button {
   text-decoration: none;
 }
 
+.blog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.blog-meta {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.blog-meta>p {
+  margin-right: 16px;
+}
+
 .created-at {
   font-size: small;
+}
+
+@media (max-width: 768px) {
+  .blog-preview {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+
+  .blog-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .blog-meta {
+    margin-top: 4px;
+  }
+
+  .blog-meta>p {
+    margin-right: 8px;
+  }
 }
 
 

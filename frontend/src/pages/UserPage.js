@@ -24,6 +24,7 @@ const PersonalPage = () => {
             <h2>user information</h2>
             <p>username: {pageOwner.username}</p>
             <p>email: {pageOwner.email}</p>
+            <p>number of blogs: {blogs?.length}</p>
             <p>
               From{" "}
               {formatDistantToNow(new Date(pageOwner.createdAt), {
