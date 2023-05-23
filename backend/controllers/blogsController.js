@@ -1,45 +1,24 @@
 const User = require("../models/userModel");
 const Blogs = require("../models/blogModel");
+const Space = require("../models/spaceModel");
 const Comments = require("../models/commentModel");
 const mongoose = require("mongoose");
 
-// get all blogs
+// get all blogs(checked)
 const getAllBlogs = async function (req, res) {
-  // remember: make private and public blogs
-
-  const blogs = await Blogs.find({}).sort({ createdAt: -1 });
-  const blogsWithComments = await Promise.all(
-    blogs.map(async (blog) => {
-      const comments = await Comments.find({ blogId: blog._id });
-      return { ...blog.toObject(), comments };
-    }),
-  );
-  res.status(200).json(blogsWithComments);
+  const blogs = await Blogs.find({}).populate("comments");
+  res.status(200).json({ blogs });
 };
 
-// const getBlogsByUserId = async function (req, res) {
-//   const userId = req.params.id;
-//   console.log("userId", userId);
-//   try {
-//     const blogs = await Blogs.find({ userId }).sort({ createdAt: -1 });
-//     const blogsWithComments = await Promise.all(
-//       blogs.map(async (blog) => {
-//         const comments = await Comments.find({ blogId: blog._id });
-//         return { ...blog.toObject(), comments };
-//       }),
-//     );
-
-//     res.status(200).json(blogsWithComments);
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
-
+// get blogs by username(checked)
 const getBlogsByUsername = async function (req, res) {
+  const username = req.params.username;
+
   try {
-    const user = await User.findOne({ username: req.params.username });
+    const user = await User.findOne({ username });
+    console.log(user._id);
     if (user) {
-      const blogs = await Blogs.find({ author: user._id }).sort({
+      const blogs = await Blogs.find({ authorId: user._id }).sort({
         createdAt: -1,
       });
       const blogsWithComments = await Promise.all(
@@ -57,22 +36,32 @@ const getBlogsByUsername = async function (req, res) {
   }
 };
 
-// post a blog
+// post a blog(checked)
 const createBlog = async function (req, res) {
-  const { title, body, author } = req.body;
-  if (!body || !title || !author)
+  const { title, body, spaceId } = req.body;
+  if (!body || !title || !spaceId)
     return res.status(400).json({ error: "Please fill all fields" });
 
   try {
-    const userId = req.user._id;
-    const blog = await Blogs.create({ title, body, author, userId });
+    const authorId = req.user._id;
+    const space = await Space.findById(spaceId);
+
+    if (!space) return res.status(400).json({ error: "No such space" });
+    if (!space.members.includes(authorId))
+      return res.status(403).json({ error: "You do not have permission" });
+
+    const blog = await Blogs.create({ title, body, authorId, spaceId });
+
+    space.blogs.push(blog._id);
+    await space.save();
+
     res.status(200).json(blog);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-// get a blog
+// get a blog(checked)
 const getBlog = async function (req, res) {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -80,38 +69,33 @@ const getBlog = async function (req, res) {
   }
 
   try {
-    const blog = await Blogs.findById(id);
+    const blog = await Blogs.findById(id).populate("comments");
     if (!blog) return res.status(400).json({ error: "No such blog" });
-    const comments = await Comments.find({ blogId: blog._id });
-    const blogWithComments = { ...blog.toObject(), comments };
-    res.status(200).json(blogWithComments);
-    // todo: make private and public blogs
+    res.status(200).json(blog);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-// delete a blog
+// delete a blog(checked)
 const deleteBlog = async (req, res) => {
   const userId = req.user._id;
-  console.log(" ");
-  console.log("deleteBlog userId", userId);
-  console.log("deleteBlog req.user", req.user);
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(400).json({ error: "Invalid id" });
 
   try {
     const blog = await Blogs.findById(id);
-    if (blog.userId != userId)
-      return res.status(403).json({ error: "You do not have permission" });
-
-    await Blogs.findOneAndDelete({ _id: id });
-    await Comments.deleteMany({ blogId: id });
     if (!blog)
       return res
         .status(400)
         .json({ error: "The blog which try to delete it is not exist" });
+
+    if (JSON.stringify(blog.authorId) !== JSON.stringify(userId))
+      return res.status(403).json({ error: "You do not have permission" });
+
+    await Blogs.findOneAndDelete({ _id: id });
+    await Comments.deleteMany({ blogId: id });
     res.status(200).json({ blog });
   } catch (error) {
     console.log("error in delete blog", error);

@@ -5,7 +5,7 @@ const Blogs = require("../models/blogModel");
 const Comments = require("../models/commentModel");
 // helper functions
 const createToken = (_id) =>
-  jwt.sign({ _id }, process.env.SECRET, { expiresIn: "3d" });
+  jwt.sign({ _id }, process.env.SECRET, { expiresIn: "30d" });
 
 async function getBlogsAndComments(user) {
   const blogs = await Blogs.find({ userId: user._id });
