@@ -12,8 +12,17 @@ const commentSchema = new Schema(
       required: true,
     },
     author: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: true,
+    },
+    likes: {
+      type: Number,
+      default: 0,
+      validate: {
+        validator: (val) => val >= 0,
+        message: "Like values can't be negative",
+      },
     },
   },
   { timestamps: true },

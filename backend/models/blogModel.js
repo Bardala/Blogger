@@ -11,17 +11,23 @@ const blogSchema = new Schema(
       required: true,
     },
     author: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
-    userId: {
-      type: String,
+    spaceId: {
+      type: Schema.Types.ObjectId,
+      ref: "Space",
       required: true,
     },
-    // state:{
-    //   type: String,
-    //   required: true,
-    // },
+    likes: {
+      type: Number,
+      default: 0,
+      validate: {
+        validator: (val) => val >= 0,
+        message: "Like value can't be negative",
+      },
+    },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   },
   { timestamps: true },

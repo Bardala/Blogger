@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const { requireAuth } = require("./middleware/requireAuth");
 
 const authRoutes = require("./routes/auth");
+const spaceRoutes = require("./routes/space");
 const commentsRouts = require("./routes/comments");
 const blogRouts = require("./routes/blog");
 const userRoutes = require("./routes/user");
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 
 app.use("/api", authRoutes);
 app.use(middleware);
+app.use("/api", spaceRoutes);
 app.use("/api", blogRouts);
 app.use("/api", commentsRouts);
 app.use("/api", userRoutes);

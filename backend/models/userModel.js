@@ -18,6 +18,11 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
+    spaces: [{ type: Schema.Types.ObjectId, ref: "Space" }],
+    blogs: [{ type: Schema.Types.ObjectId, ref: "Blog" }],
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+    followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    following: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true },
 );

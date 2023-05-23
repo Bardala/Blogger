@@ -1,3 +1,4 @@
+const User = require("../models/userModel");
 const Blogs = require("../models/blogModel");
 const Comments = require("../models/commentModel");
 const mongoose = require("mongoose");
@@ -16,37 +17,41 @@ const getAllBlogs = async function (req, res) {
   res.status(200).json(blogsWithComments);
 };
 
-const getBlogsByUserId = async function (req, res) {
-  const userId = req.params.id;
-  console.log("userId", userId);
-  try {
-    const blogs = await Blogs.find({ userId }).sort({ createdAt: -1 });
-    const blogsWithComments = await Promise.all(
-      blogs.map(async (blog) => {
-        const comments = await Comments.find({ blogId: blog._id });
-        return { ...blog.toObject(), comments };
-      }),
-    );
+// const getBlogsByUserId = async function (req, res) {
+//   const userId = req.params.id;
+//   console.log("userId", userId);
+//   try {
+//     const blogs = await Blogs.find({ userId }).sort({ createdAt: -1 });
+//     const blogsWithComments = await Promise.all(
+//       blogs.map(async (blog) => {
+//         const comments = await Comments.find({ blogId: blog._id });
+//         return { ...blog.toObject(), comments };
+//       }),
+//     );
 
-    res.status(200).json(blogsWithComments);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+//     res.status(200).json(blogsWithComments);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
 
 const getBlogsByUsername = async function (req, res) {
   try {
-    const blogs = await Blogs.find({ author: req.params.username }).sort({
-      createdAt: -1,
-    });
-    const blogsWithComments = await Promise.all(
-      blogs.map(async (blog) => {
-        const comments = await Comments.find({ blogId: blog._id });
-        return { ...blog.toObject(), comments };
-      }),
-    );
-
-    res.status(200).json(blogsWithComments);
+    const user = await User.findOne({ username: req.params.username });
+    if (user) {
+      const blogs = await Blogs.find({ author: user._id }).sort({
+        createdAt: -1,
+      });
+      const blogsWithComments = await Promise.all(
+        blogs.map(async (blog) => {
+          const comments = await Comments.find({ blogId: blog._id });
+          return { ...blog.toObject(), comments };
+        }),
+      );
+      res.status(200).json(blogsWithComments);
+    } else {
+      res.status(404).json({ error: "User not found" });
+    }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -57,6 +62,7 @@ const createBlog = async function (req, res) {
   const { title, body, author } = req.body;
   if (!body || !title || !author)
     return res.status(400).json({ error: "Please fill all fields" });
+
   try {
     const userId = req.user._id;
     const blog = await Blogs.create({ title, body, author, userId });
@@ -118,6 +124,6 @@ module.exports = {
   createBlog,
   getBlog,
   deleteBlog,
-  getBlogsByUserId,
+  // getBlogsByUserId,
   getBlogsByUsername,
 };
