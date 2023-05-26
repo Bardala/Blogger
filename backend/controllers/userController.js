@@ -7,11 +7,11 @@ const Comments = require("../models/commentModel");
 const createToken = (_id) =>
   jwt.sign({ _id }, process.env.SECRET, { expiresIn: "30d" });
 
-async function getBlogsAndComments(user) {
-  const blogs = await Blogs.find({ userId: user._id });
-  const comments = await Comments.find({ author: user.username });
-  return { ...user.toObject(), blogs, comments };
-}
+// async function getBlogsAndComments(user) {
+//   const blogs = await Blogs.find({ userId: user._id });
+//   const comments = await Comments.find({ author: user.username });
+//   return { ...user.toObject(), blogs, comments };
+// }
 
 // controllers
 const signup = async function (req, res) {
@@ -39,16 +39,10 @@ const login = async function (req, res) {
 
 const getUsers = async (req, res) => {
   try {
-    const users = await User.find({}, "-password -updatedAt");
-
-    const usersWithActivities = await Promise.all(
-      users.map((user) => {
-        console.log(user);
-        return getBlogsAndComments(user);
-      }),
-    );
-
-    res.status(200).json(usersWithActivities);
+    const users = await User.find({}, "-password -updatedAt")
+      .populate("blogs")
+      .populate("comments");
+    res.status(200).json(users);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -59,13 +53,12 @@ const getUserByUsername = async (req, res) => {
     const user = await User.findOne(
       { username: req.params.username },
       "-password -updatedAt",
-    );
+    )
+      .populate("blogs")
+      .populate("comments");
     console.log(user);
 
-    const usersWithActivities = await getBlogsAndComments(user);
-
-    console.log(usersWithActivities);
-    res.status(200).json(usersWithActivities);
+    res.status(200).json(user);
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });

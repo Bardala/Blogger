@@ -17,20 +17,16 @@ const getBlogsByUsername = async function (req, res) {
   try {
     const user = await User.findOne({ username });
     console.log(user._id);
-    if (user) {
-      const blogs = await Blogs.find({ authorId: user._id }).sort({
+
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const blogs = await Blogs.find({ authorId: user._id })
+      .sort({
         createdAt: -1,
-      });
-      const blogsWithComments = await Promise.all(
-        blogs.map(async (blog) => {
-          const comments = await Comments.find({ blogId: blog._id });
-          return { ...blog.toObject(), comments };
-        }),
-      );
-      res.status(200).json(blogsWithComments);
-    } else {
-      res.status(404).json({ error: "User not found" });
-    }
+      })
+      .populate("comments");
+
+    res.status(200).json(blogs);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -39,6 +35,7 @@ const getBlogsByUsername = async function (req, res) {
 // post a blog(checked)
 const createBlog = async function (req, res) {
   const { title, body, spaceId } = req.body;
+  const user = req.user;
   if (!body || !title || !spaceId)
     return res.status(400).json({ error: "Please fill all fields" });
 
@@ -55,7 +52,10 @@ const createBlog = async function (req, res) {
     space.blogs.push(blog._id);
     await space.save();
 
-    res.status(200).json(blog);
+    user.blogs.push(blog._id);
+    await user.save();
+
+    res.sendStatus(200);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -79,24 +79,33 @@ const getBlog = async function (req, res) {
 
 // delete a blog(checked)
 const deleteBlog = async (req, res) => {
-  const userId = req.user._id;
+  const user = req.user;
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(400).json({ error: "Invalid id" });
 
   try {
     const blog = await Blogs.findById(id);
+    const space = await Space.findById(blog.spaceId);
+
     if (!blog)
       return res
         .status(400)
         .json({ error: "The blog which try to delete it is not exist" });
 
-    if (JSON.stringify(blog.authorId) !== JSON.stringify(userId))
+    if (JSON.stringify(blog.authorId) !== JSON.stringify(user._id))
       return res.status(403).json({ error: "You do not have permission" });
 
     await Blogs.findOneAndDelete({ _id: id });
     await Comments.deleteMany({ blogId: id });
-    res.status(200).json({ blog });
+
+    await space.blogs.pull(id);
+    await space.save();
+
+    await user.blogs.pull(id);
+    await user.save();
+
+    res.sendStatus(200);
   } catch (error) {
     console.log("error in delete blog", error);
     res.status(400).json({ error: error.message });
@@ -108,6 +117,5 @@ module.exports = {
   createBlog,
   getBlog,
   deleteBlog,
-  // getBlogsByUserId,
   getBlogsByUsername,
 };
