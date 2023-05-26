@@ -100,7 +100,40 @@ const followUser = async (req, res) => {
       { $addToSet: { following: userToFollow._id } },
       { new: true },
     );
-    res.json({ currentUser, userToFollow });
+
+    res.sendStatus(200);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const unfollowUser = async (req, res) => {
+  let currentUser = req.user;
+  console.log(currentUser.following);
+  try {
+    let userToUnfollow = await User.findOne({
+      username: req.params.username,
+    });
+    if (!userToUnfollow)
+      return res.status(404).json({ error: "User not found" });
+    if (!currentUser.following.includes(userToUnfollow._id)) {
+      return res.status(400).json({ error: "You don't follow this user" });
+    }
+
+    currentUser = await User.findOneAndUpdate(
+      { username: currentUser.username },
+      { $pull: { following: userToUnfollow._id } },
+      { new: true },
+    );
+
+    userToUnfollow = await User.findOneAndUpdate(
+      { username: userToUnfollow.username },
+      { $pull: { followers: currentUser._id } },
+      { new: true },
+    );
+
+    console.log(currentUser.following);
+    res.sendStatus(200);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -112,4 +145,5 @@ module.exports = {
   getUsers,
   getUserByUsername,
   followUser,
+  unfollowUser,
 };
