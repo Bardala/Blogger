@@ -74,20 +74,33 @@ const getUserByUsername = async (req, res) => {
 
 //checked
 const followUser = async (req, res) => {
+  let currentUser = req.user;
+  console.log(currentUser.following);
+
+  if (currentUser.username === req.params.username) {
+    return res.status(400).json({ error: "You cannot follow yourself" });
+  }
+
   try {
-    const user = await User.findOneAndUpdate(
-      { username: req.params.username },
-      { $addToSet: { followers: req.user._id } },
-      { new: true },
+    let userToFollow = await User.findOne({ username: req.params.username });
+    console.log(userToFollow);
+    if (!userToFollow) return res.status(404).json({ error: "User not found" });
+    if (currentUser.following.includes(userToFollow._id)) {
+      return res.status(400).json({ error: "You already follow this user" });
+    }
+
+    userToFollow = await User.findOneAndUpdate(
+      { username: userToFollow.username },
+      { $addToSet: { followers: currentUser._id } },
+      { new: true }, // return the updated user
     );
 
-    const currentUser = await User.findOneAndUpdate(
-      { _id: req.user._id },
-      { $addToSet: { following: user._id } },
+    currentUser = await User.findOneAndUpdate(
+      { username: currentUser.username },
+      { $addToSet: { following: userToFollow._id } },
       { new: true },
     );
-
-    res.status(200).json({ user, currentUser });
+    res.json({ currentUser, userToFollow });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
