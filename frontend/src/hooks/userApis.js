@@ -72,3 +72,33 @@ export const useGetAllUsers = () => {
 
   return { users, isPending, error };
 };
+
+export const usePutFollower = (username) => {
+  const { user } = useAuthContext();
+  const [isPending, setIsPending] = useState(null);
+  const [error, setError] = useState(null);
+  console.log(username);
+
+  const followUser = async () => {
+    setIsPending(true);
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/users/${username}/follow`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        },
+      );
+
+      const data = await response.json();
+      if (!response.ok) setError(data.error);
+    } catch (error) {
+      setError(error.message);
+    }
+    setIsPending(false);
+  };
+
+  return { isPending, error, followUser };
+};

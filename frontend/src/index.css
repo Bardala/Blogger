@@ -505,3 +505,34 @@ input.error {
 .user-profile .user-information .date {
   font-style: italic;
 }
+
+.user-information {
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.follow {
+  background-color: #00a0d2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.follow:hover {
+  background-color: #008fb3;
+}
+
+.follow:disabled {
+  background-color: #ccc;
+}

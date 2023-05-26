@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
-import formatDistantToNow from "date-fns/formatDistanceToNow";
 import BlogList from "../components/BlogList";
 import { useGetUserBlogs } from "../hooks/blogsApis";
 import { useGetUser } from "../hooks/userApis";
+import UserInfoCard from "../components/UserInfoCard";
 
 const PersonalPage = () => {
   const { username } = useParams();
@@ -14,26 +14,15 @@ const PersonalPage = () => {
   } = useGetUser(username);
 
   if (getUserPending) return <p className="loading">Loading...</p>;
+  if (getUserError) return <p className="error">{error}</p>;
 
   return (
     <>
-      {getUserError && <div className="error">{error}</div>}
       {pageOwner && (
         <div className="user-profile">
           <h1>{pageOwner.username} Page</h1>
-          <div className="user-information">
-            <h2>{pageOwner.username} card</h2>
-            <p>username: {pageOwner.username}</p>
-            <p>email: {pageOwner.email}</p>
-            <p>number of blogs: {blogs?.length}</p>
-            <p>number of comments: {pageOwner.comments.length}</p>
-            <p>
-              From{" "}
-              {formatDistantToNow(new Date(pageOwner.createdAt), {
-                addSuffix: true,
-              })}
-            </p>
-          </div>
+
+          <UserInfoCard pageOwner={pageOwner} blogsLength={blogs?.length} />
 
           <div>
             {error && <div className="error">{error}</div>}
