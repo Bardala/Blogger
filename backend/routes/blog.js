@@ -5,6 +5,7 @@ const {
   deleteBlog,
   // getBlogsByUserId,
   getBlogsByUsername,
+  addAuthorName,
 } = require("../controllers/blogsController");
 const express = require("express");
 const router = express.Router();

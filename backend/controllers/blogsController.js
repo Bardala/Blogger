@@ -34,20 +34,22 @@ const getBlogsByUsername = async function (req, res) {
 
 // post a blog(checked)
 const createBlog = async function (req, res) {
-  const { title, body, spaceId } = req.body;
+  let { title, body, spaceId } = req.body;
   const user = req.user;
-  if (!body || !title || !spaceId)
+  const authorId = req.user._id;
+  const author = req.user.username;
+  spaceId = spaceId || "646c1929ebba035de6f2208c";
+  if (!body || !title)
     return res.status(400).json({ error: "Please fill all fields" });
 
   try {
-    const authorId = req.user._id;
-    const space = await Space.findById(spaceId);
+    let space = await Space.findById(spaceId);
 
     if (!space) return res.status(400).json({ error: "No such space" });
     if (!space.members.includes(authorId))
       return res.status(403).json({ error: "You do not have permission" });
 
-    const blog = await Blogs.create({ title, body, authorId, spaceId });
+    const blog = await Blogs.create({ title, body, authorId, author, spaceId });
 
     space.blogs.push(blog._id);
     await space.save();
@@ -55,7 +57,7 @@ const createBlog = async function (req, res) {
     user.blogs.push(blog._id);
     await user.save();
 
-    res.sendStatus(200);
+    res.status(200).json({ blog });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

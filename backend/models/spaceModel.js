@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 const date = new Date();
 const Schema = mongoose.Schema;
+const schedule = require("node-schedule");
+
 const spaceSchema = new Schema({
   title: {
     type: String,
@@ -35,11 +37,24 @@ const spaceSchema = new Schema({
   expirationDate: {
     type: Date,
     default: () => {
-      // set the expiration date to 24 hours from now
-      date.setDate(date.getDate() + 1);
+      date.setDate(date.getDate() + 3);
       return date;
     },
   },
+});
+
+// Define a cron job that runs every 3 days at 00:00
+const updateInvitationKeyJob = schedule.scheduleJob("0 0 */3 * *", () => {
+  Space.find({}, (err, spaces) => {
+    if (err) {
+      console.error(err);
+    } else {
+      spaces.forEach((space) => {
+        space.invitationKey = crypto.randomBytes(16).toString("hex");
+        space.save();
+      });
+    }
+  });
 });
 
 spaceSchema.pre("save", function (next) {

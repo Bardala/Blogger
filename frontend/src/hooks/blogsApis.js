@@ -5,12 +5,54 @@ import { useAuthContext } from "./useAuthContext";
 
 export const useCreateBlog = () => {
   const { user } = useAuthContext();
+  const [spaceId, setSpaceId] = useState(null);
+  const [spaceTitle, setSpaceTitle] = useState("Default");
+  const [spaces, setSpaces] = useState(null);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const url = "http://localhost:4000/api/createBlog";
   const nav = useNavigate();
+
+  useEffect(() => {
+    const getSpaces = async () => {
+      try {
+        setIsPending(true);
+        const response = await fetch(
+          "http://localhost:4000/api/getUserSpaces",
+          {
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+            mode: "cors",
+          },
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setSpaces(data);
+          console.log("User Spaces: ", data);
+        } else {
+          console.log("error getSpaces", data.error);
+          throw Error(data.error);
+        }
+      } catch (error) {
+        setError(error);
+      }
+      setIsPending(false);
+    };
+    if (user) getSpaces();
+  }, [user]);
+
+  useEffect(() => {
+    for (let key in spaces) {
+      if (spaces[key].title === spaceTitle) {
+        setSpaceId(spaces[key]._id);
+        return;
+      }
+    }
+  }, [spaceId, spaceTitle, spaces]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,14 +75,14 @@ export const useCreateBlog = () => {
             Authorization: `Bearer ${user.token}`,
           },
           mode: "cors",
-          body: JSON.stringify({ title, body, author: user.username }),
+          body: JSON.stringify({ title, body, author: user.username, spaceId }),
         });
         const data = await res.json();
 
         if (res.ok) {
           setIsPending(false);
           console.log("new blog added");
-          nav("/");
+          nav(`/space/${spaceId}`);
         } else {
           setError(data.error);
           console.log(data.error);
@@ -54,43 +96,18 @@ export const useCreateBlog = () => {
     if (user) postBlog();
   };
 
-  return { handleSubmit, title, setTitle, body, setBody, error, isPending };
-};
-
-export const useGetAllBlogs = () => {
-  const { user } = useAuthContext();
-  const { dispatch, blogs } = useBlogContext();
-  const [error, setError] = useState("");
-  const [isPending, setIsPending] = useState(false);
-
-  useEffect(() => {
-    const getBlogs = async () => {
-      if (!user) {
-        setError("You must me logged in");
-        return;
-      }
-      setIsPending(true);
-      try {
-        const response = await fetch("http://localhost:4000/api/blogs", {
-          headers: { Authorization: `Bearer ${user.token}` },
-          mode: "cors",
-        });
-        if (!response.ok) {
-          setError(response.error);
-        }
-        const data = await response.json();
-        dispatch({ type: "GET-ALL-BLOGS", payload: data });
-      } catch (error) {
-        setError("Connection Error: " + error.message);
-      } finally {
-        setIsPending(false);
-      }
-    };
-
-    if (user) getBlogs();
-  }, [dispatch, user]);
-
-  return { blogs, error, isPending };
+  return {
+    handleSubmit,
+    title,
+    setTitle,
+    setSpaceTitle,
+    spaceTitle,
+    spaces,
+    body,
+    setBody,
+    error,
+    isPending,
+  };
 };
 
 export const useGetBlog = (blogId, user) => {
@@ -115,6 +132,7 @@ export const useGetBlog = (blogId, user) => {
         const data = await response.json();
         if (response.ok) {
           dispatch({ type: "GET-BLOG", payload: data });
+          console.log("blog", data);
           if (data.author === user.username) setOwner(true);
         } else {
           setError(data.error);

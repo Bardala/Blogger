@@ -5,7 +5,7 @@ export const useGetUser = (username) => {
   const { user } = useAuthContext();
   const [isPending, setIsPending] = useState(null);
   const [error, setError] = useState(null);
-  const [pageOwner, setPageOwner] = useState(null);
+  const [orderedUser, setOrderedUser] = useState(null);
 
   useEffect(() => {
     const getUser = async () => {
@@ -21,8 +21,7 @@ export const useGetUser = (username) => {
         );
         const data = await response.json();
         if (response.ok) {
-          setPageOwner(data);
-          console.log(data);
+          setOrderedUser(data);
         } else {
           setError(data.error);
           console.log(data);
@@ -36,7 +35,7 @@ export const useGetUser = (username) => {
     if (user) getUser();
   }, [user, username]);
 
-  return { isPending, error, pageOwner };
+  return { isPending, error, orderedUser };
 };
 
 export const useGetAllUsers = () => {
@@ -91,9 +90,12 @@ export const usePutFollower = (username) => {
           },
         },
       );
-
       const data = await response.json();
-      if (!response.ok) setError(data.error);
+      console.log(response);
+      console.log(data?.error);
+
+      if (!response.ok) throw Error(response.statusText);
+      window.location.reload(true);
     } catch (error) {
       setError(error.message);
     }
@@ -101,4 +103,36 @@ export const usePutFollower = (username) => {
   };
 
   return { isPending, error, followUser };
+};
+
+export const useUnfollowUser = (username) => {
+  const { user } = useAuthContext();
+  const [isPending, setIsPending] = useState(null);
+  const [error, setError] = useState(null);
+
+  async function unfollowUser() {
+    setIsPending(true);
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/users/${username}/unfollow`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        },
+      );
+      const data = await response.json();
+      console.log("response", response);
+      console.log("data", data);
+
+      if (!response.ok) throw Error(response.statusText);
+      window.location.reload(true);
+    } catch (error) {
+      setError(error.message);
+    }
+    setIsPending(false);
+  }
+
+  return { isPending, error, unfollowUser };
 };

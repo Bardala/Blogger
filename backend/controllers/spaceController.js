@@ -12,7 +12,6 @@ async function checkoutIsTitleExist(title) {
     );
 }
 
-// get all spaces(checked)
 const getAllSpaces = async function (req, res) {
   try {
     const spaces = await Space.find({});
@@ -22,38 +21,63 @@ const getAllSpaces = async function (req, res) {
   }
 };
 
-// create a new space(checked)
 const createSpace = async function (req, res) {
-  const { title, state, ownerId } = req.body;
-  if (!title || !state || !ownerId)
+  const { title, state } = req.body;
+  const user = req.user;
+
+  if (!title || !state)
     return res.status(400).json({ error: "Please fill all fields" });
 
   try {
     if (state === "public") await checkoutIsTitleExist(title);
-    const space = await Space.create({ title, state, ownerId });
+    const space = await Space.create({ title, state, ownerId: user._id });
+
+    await user.spaces.push(space._id);
+    await user.save();
+
     res.status(200).json(space);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-// get a single space by id(checked)
-const getSpace = async function (req, res) {
-  const { id } = req.params;
-  if (!id) return res.status(400).json({ error: "Please provide an id" });
+const getDefaultSpace = async function (req, res) {
   try {
-    const space = await Space.findById(id)
-      .populate("adminId")
-      .populate("blogs")
-      .populate("members");
+    const space = await Space.findById("646c1929ebba035de6f2208c").populate(
+      "blogs",
+    );
+    if (!space)
+      return res
+        .status(404)
+        .json({ error: "Server Error: Default Space not found" });
+    res.status(200).json(space);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+const getSpace = async function (req, res) {
+  const user = req.user;
+  const { id } = req.params;
+
+  if (!id) return res.status(400).json({ error: "Please provide an id" });
+
+  try {
+    const space = await Space.findById(
+      id,
+      "-invitationKey -expirationDate",
+    ).populate("blogs");
+
     if (!space) return res.status(404).json({ error: "Space not found" });
+    if (!space.members.includes(user._id))
+      return res.status(403).json({ error: `You don't have access` });
+
     res.status(200).json(space);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-// update a space by id(checked)
 const updateSpace = async function (req, res) {
   const { id } = req.params;
   const { title, state } = req.body;
@@ -66,7 +90,6 @@ const updateSpace = async function (req, res) {
       { title, state },
       { new: true },
     );
-    // new means return the updated document not the old one
     if (!space) return res.status(404).json({ error: "Space not found" });
     res.status(200).json(space);
   } catch (error) {
@@ -115,6 +138,8 @@ const inviteUser = async function (req, res) {
 
 // join a space by id and invitationKey(checked)
 const joinSpace = async function (req, res) {
+  const user = req.user;
+  console.log(user);
   const { invitationKey } = req.body;
   if (!invitationKey)
     return res.status(400).json({ error: "Please provide an invitationKey" });
@@ -126,10 +151,6 @@ const joinSpace = async function (req, res) {
 
     // get the current user from the request and check if they are already a member
 
-    const user = req.user;
-    console.log(user);
-    console.log(user._id);
-    console.log(user.spaces);
     if (space.members.includes(user._id))
       return res.status(409).json({ error: "User already a member" });
 
@@ -167,7 +188,25 @@ const deleteSpace = async function (req, res) {
   }
 };
 
+const getUserSpaces = async (req, res) => {
+  const user = req.user;
+  const spacesIds = [...user.spaces];
+  try {
+    const spacesTitles = await Promise.all(
+      spacesIds.map(async (spaceId) => {
+        const spaceTitle = await Space.findById(spaceId, "title _id");
+        return spaceTitle;
+      }),
+    );
+    res.status(200).send({ ...spacesTitles });
+  } catch (err) {
+    res.status(400).json({ error: err });
+  }
+};
+
 module.exports = {
+  getUserSpaces,
+  getDefaultSpace,
   getAllSpaces,
   createSpace,
   getSpace,

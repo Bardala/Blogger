@@ -6,11 +6,15 @@ const {
   inviteUser,
   joinSpace,
   getAllSpaces,
+  getDefaultSpace,
+  getUserSpaces,
 } = require("../controllers/spaceController");
 
 const express = require("express");
 const router = express.Router();
 
+router.get("/getUserSpaces", getUserSpaces);
+router.get("/getDefaultSpace", getDefaultSpace);
 router.get("/getAllSpaces", getAllSpaces);
 router.post("/createSpace", createSpace);
 router.get("/getSpace/:id", getSpace);

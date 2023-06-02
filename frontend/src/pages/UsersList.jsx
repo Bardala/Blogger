@@ -15,6 +15,10 @@ const UsersList = () => {
             <li key={user._id}>
               <Link to={`/users/${user.username}`}>{user.username}</Link>
               <div className="counts-container">
+                <p className="followers-count">
+                  {" "}
+                  {user.followers.length} followers{" "}
+                </p>
                 <p className="blogs-count">{user.blogs.length} blogs</p>
                 <p className="comments-count">
                   {user.comments.length} comments

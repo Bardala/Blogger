@@ -11,6 +11,7 @@ const BlogDetails = () => {
   const { owner, isPending, error, blog } = useGetBlog(id, user);
   const { error: deleteError, handleDelete } = useDeleteBlog(id, user);
   if (isPending) return <p className="loading">Loading...</p>;
+  console.log(blog);
 
   return (
     <div className="blog-details">

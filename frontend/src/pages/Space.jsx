@@ -1,11 +1,13 @@
 import { Link, useParams } from "react-router-dom";
 import BlogList from "../components/BlogList";
+import SpaceInfo from "../components/SpaceInfo";
 import { useGetSpace } from "../hooks/spaceApis";
 
-const Home = () => {
+const Space = () => {
   const { id } = useParams();
   const { space, error, isPending } = useGetSpace(id);
   const blogs = space.blogs;
+  const { members, adminId: admins, title: spaceTitle, state } = space;
 
   if (isPending) return <p>Loading...</p>;
 
@@ -23,9 +25,15 @@ const Home = () => {
   return (
     <div className="home">
       {error && <p className="error">{error}</p>}
+      <SpaceInfo
+        members={members}
+        admins={admins}
+        spaceTitle={spaceTitle}
+        state={state}
+      />
       {blogs?.length > 0 && <BlogList blogs={blogs} />}
     </div>
   );
 };
 
-export default Home;
+export default Space;

@@ -536,3 +536,72 @@ input.error {
 .follow:disabled {
   background-color: #ccc;
 }
+
+/* User spaces list */
+.user-spaces-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+/* User space */
+.space {
+  width: 200px;
+  height: 100px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* User space link */
+.space-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-decoration: none;
+  color: var(--primary);
+}
+
+/* User space link hover effect */
+.space-link:hover {
+  background-color: #f2f2f2;
+}
+
+
+/* Space info */
+.space-info {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 10px;
+  border: 1px #ddd;
+  border-radius: 4px;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-bottom: 20px;
+}
+
+.space-info h1 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.space-info p {
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .space-info {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+
+  .space-info h1 {
+    font-size: 16px;
+  }
+
+  .space-info p {
+    font-size: 12px;
+  }
+}

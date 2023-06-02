@@ -55,12 +55,23 @@ const getUserByUsername = async (req, res) => {
       "-password -updatedAt",
     )
       .populate("blogs")
-      .populate("comments");
+      .populate("comments")
+      .populate("spaces", "title _id");
     console.log(user);
 
     res.status(200).json(user);
   } catch (error) {
     console.log(error);
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id, "-password -updatedAt");
+    if (!user) return res.status(404).json({ error: "User not found" });
+    res.status(200).json(user);
+  } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
@@ -94,7 +105,7 @@ const followUser = async (req, res) => {
       { new: true },
     );
 
-    res.sendStatus(200);
+    res.status(200).json({ currentUser, userToFollow });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -126,13 +137,14 @@ const unfollowUser = async (req, res) => {
     );
 
     console.log(currentUser.following);
-    res.sendStatus(200);
+    res.status(200).json({ currentUser, userToUnfollow });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
 module.exports = {
+  getUserById,
   signup,
   login,
   getUsers,

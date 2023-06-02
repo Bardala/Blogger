@@ -1,3 +1,4 @@
+const Space = require("./spaceModel");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
@@ -41,6 +42,7 @@ UserSchema.statics.signup = async function (username, email, password) {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
   const user = await this.create({ username, email, password: hash });
+  await addUserToDefaultSpace(user);
   return user;
 };
 
@@ -53,4 +55,15 @@ UserSchema.statics.login = async function (email, password) {
   return user;
 };
 
+async function addUserToDefaultSpace(user) {
+  const space = await Space.findByIdAndUpdate(
+    "646c1929ebba035de6f2208c",
+    { $push: { members: user._id } },
+    { new: true },
+  );
+
+  if (!space) throw Error("Default space not found");
+
+  user.spaces.push(space._id);
+}
 module.exports = mongoose.model("User", UserSchema);

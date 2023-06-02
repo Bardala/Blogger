@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import UsersList from "./pages/UsersList";
 import PersonalPage from "./pages/UserPage";
+import Space from "./pages/Space";
 
 function App() {
   const { user } = useAuthContext();
@@ -24,12 +25,13 @@ function App() {
           />
           <Route
             path="/signup"
-            element={!user ? <Signup /> : <Navigate to="/" />}
+            element={!user ? <Signup /> : <Navigate to="/space" />}
           />
           <Route
             path="/login"
-            element={!user ? <Login /> : <Navigate to="/" />}
+            element={!user ? <Login /> : <Navigate to="/space" />}
           />
+          <Route path="/space/:id" element={<Space />} />
           <Route path="/createBlog" element={<CreateBlog />} />
           <Route path="/blogs/:id" element={<BlogDetails />} />
           <Route path="/users" element={<UsersList />} />
