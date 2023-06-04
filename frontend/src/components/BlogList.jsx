@@ -2,7 +2,7 @@ import "../styles/blogList.css";
 
 import { Link } from "react-router-dom";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import LikeBlogButton from "./LikeBlogButton";
+import LikeBlogButton from "./LikeButton";
 
 const BlogList = ({ blogs }) => {
   return (

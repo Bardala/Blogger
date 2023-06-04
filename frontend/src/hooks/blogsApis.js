@@ -243,6 +243,7 @@ export const usePostLike = () => {
       const data = await response.json();
       if (response.ok) {
         console.log("the blog is liked");
+        console.log(data);
         setLikes(data.likes);
       } else {
         throw Error(data.error);
