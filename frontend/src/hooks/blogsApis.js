@@ -220,3 +220,38 @@ export const useDeleteBlog = (blogId, user, spaceId) => {
 
   return { error, handleDelete };
 };
+
+export const usePostLike = () => {
+  const [error, setError] = useState();
+  const [isPending, setIsPending] = useState(false);
+  const [likes, setLikes] = useState(null);
+
+  const postLike = async (blogId, user) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/blogs/${blogId}/like`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          mode: "cors",
+        },
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log("the blog is liked");
+        setLikes(data.likes);
+      } else {
+        throw Error(data.error);
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsPending(false);
+    }
+  };
+  return { error, postLike, isPending, likes };
+};

@@ -112,7 +112,22 @@ const deleteBlog = async (req, res) => {
   }
 };
 
+const likeBlog = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const blog = await Blogs.findById(id);
+    if (!blog) return res.status(400).json({ error: "No such blog" });
+    blog.likes += 1;
+    await blog.save();
+    res.status(200).json(blog);
+  } catch (error) {
+    console.log("error in like blog", error);
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
+  likeBlog,
   getAllBlogs,
   createBlog,
   getBlog,

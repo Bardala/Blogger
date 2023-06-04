@@ -4,9 +4,7 @@ const AddMemberButton = ({ spaceId, admin }) => {
   const { addMember, error, isPending } = useAddMember();
 
   const handleClick = () => {
-    console.log("handleClick");
     const memberId = prompt("Enter the member id:");
-    console.log(admin);
     if (admin) addMember(spaceId, admin, memberId);
   };
 
