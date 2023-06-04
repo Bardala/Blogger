@@ -1,0 +1,60 @@
+.create-space {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    padding: 20px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    background: #fafafa;
+}
+
+.create-space h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(–primary);
+}
+
+.create-space label {
+    display: block;
+    margin-top: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.create-space input,
+.create-space select {
+    display: block;
+    width: 80%;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #333;
+    border-radius: 5px;
+}
+
+.create-space button {
+    display: block;
+    width: 50%;
+    margin-top: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(–primary);
+    color: white;
+    cursor: pointer;
+}
+
+.create-space button:hover {
+    background-color: var(–secondary);
+}
+
+.create-space button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.create-space .error {
+    color: red;
+    font-weight: bold;
+}

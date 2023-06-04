@@ -41,7 +41,6 @@ const Navbar = () => {
         <nav className="links">
           <Link to="/users">users</Link>
           <Link to="/">Home</Link>
-          <Link to="/createBlog">New Blog</Link>
           <button onClick={handleClick}>logout</button>
         </nav>
       </header>

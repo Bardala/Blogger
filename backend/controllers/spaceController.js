@@ -24,6 +24,7 @@ const getAllSpaces = async function (req, res) {
 const createSpace = async function (req, res) {
   const { title, state } = req.body;
   const user = req.user;
+  console.log("state", state, "title", title);
 
   if (!title || !state)
     return res.status(400).json({ error: "Please fill all fields" });

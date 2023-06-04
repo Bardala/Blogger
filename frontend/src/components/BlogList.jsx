@@ -18,7 +18,7 @@ const BlogList = ({ blogs }) => {
 
             <div className="blog-meta">
               <p className="author">
-                By <strong>{blog.author}</strong>
+                <strong>{blog.author}</strong>
               </p>
               <p className="comments-count">{blog.comments.length} comments</p>
 

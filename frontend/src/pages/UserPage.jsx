@@ -1,3 +1,5 @@
+import "../styles/userPage.css";
+
 import { Link, useParams } from "react-router-dom";
 import BlogList from "../components/BlogList";
 import { useGetUserBlogs } from "../hooks/blogsApis";
@@ -26,7 +28,6 @@ const PersonalPage = () => {
 
           <UserInfoCard pageOwner={pageOwner} blogsLength={blogs?.length} />
 
-          {/* {user.user.username === pageOwner.username && ( */}
           <div className="user-spaces">
             <h2>Spaces</h2>
 
@@ -47,7 +48,6 @@ const PersonalPage = () => {
                 )}
             </div>
           </div>
-          {/* )} */}
 
           {error && <div className="error">{error}</div>}
           {isPending && <p>Loading...</p>}

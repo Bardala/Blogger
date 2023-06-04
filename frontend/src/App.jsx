@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import BlogDetails from "./pages/BlogDetails";
 import NotFound from "./pages/NotFound";
 import CreateBlog from "./pages/CreateBlog";
+import CreateSpace from "./pages/CreateSpace";
 import { useAuthContext } from "./hooks/useAuthContext";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -33,6 +34,7 @@ function App() {
           />
           <Route path="/space/:id" element={<Space />} />
           <Route path="/createBlog" element={<CreateBlog />} />
+          <Route path="/createSpace" element={<CreateSpace />} />
           <Route path="/blogs/:id" element={<BlogDetails />} />
           <Route path="/users" element={<UsersList />} />
           <Route path="/users/:username" element={<PersonalPage />} />

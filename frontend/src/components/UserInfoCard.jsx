@@ -1,6 +1,9 @@
+import "../styles/userInfoCard.css";
+
 import { useAuthContext } from "../hooks/useAuthContext";
 import formatDistantToNow from "date-fns/formatDistanceToNow";
 import { useGetUser, usePutFollower, useUnfollowUser } from "../hooks/userApis";
+import { Link } from "react-router-dom";
 
 export default function UserInfoCard(props) {
   let { user } = useAuthContext();
@@ -24,6 +27,14 @@ export default function UserInfoCard(props) {
     <div className="user-information">
       {followUserError && <p className="error">{followUserError}</p>}
       {unfollowUserError && <p className="error">{unfollowUserError}</p>}
+
+      {user && user.username === pageOwner.username && (
+        <div className="user-links">
+          <Link to="/createBlog">Create New Blog</Link>
+          <Link to="/createSpace">Create New Space</Link>
+        </div>
+      )}
+
       <div className="card-header">
         <h2 className="page">{pageOwner.username} card</h2>
         {user && user.username !== pageOwner.username && (

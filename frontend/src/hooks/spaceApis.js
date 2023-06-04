@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 import { useBlogContext } from "./useBlogContext";
+import { useNavigate } from "react-router-dom";
 
 export const useGetDefaultSpace = () => {
   const { user } = useAuthContext();
@@ -185,4 +186,39 @@ export const useJoinSpace = () => {
   };
 
   return { error, isPending, joinSpace };
+};
+
+export const useCreateSpace = () => {
+  const [error, setError] = useState(null);
+  const [isPending, setIsPending] = useState(false);
+  const nav = useNavigate();
+
+  const createSpace = async (title, state, admin) => {
+    try {
+      setIsPending(true);
+      const response = await fetch("http://localhost:4000/api/createSpace", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${admin.token}`,
+        },
+        mode: "cors",
+        body: JSON.stringify({ title, state }),
+      });
+
+      const space = await response.json();
+      if (response.ok) {
+        console.log("Created Space: ", space);
+        nav("/space/" + space._id);
+      } else {
+        throw Error(space.error);
+      }
+    } catch (error) {
+      console.log(error);
+      setError(error.message);
+    }
+    setIsPending(false);
+  };
+
+  return { error, isPending, createSpace };
 };
