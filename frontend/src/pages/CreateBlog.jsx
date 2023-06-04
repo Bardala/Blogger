@@ -1,10 +1,9 @@
+import "../styles/createBlog.css";
 import Markdown from "markdown-to-jsx";
 import { useCreateBlog } from "../hooks/blogsApis";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const CreateBlog = () => {
-  // const [spaceTitle, setSpaceTitle] = useState();
-
   const {
     handleSubmit,
     title,
@@ -24,24 +23,26 @@ const CreateBlog = () => {
     <div className="create">
       <h4>Add a New Blog</h4>
       <form onSubmit={(e) => handleSubmit(e)}>
-        <label>Blog Title:</label>
+        <label className="title-label">Blog Title:</label>
 
         <input
+          className="title-input"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
 
-        <label>Blog body:</label>
+        <label className="body-label">Blog body:</label>
         <Markdown>{body}</Markdown>
 
         <textarea
+          className="body-textarea"
           value={body}
           onChange={(e) => setBody(e.target.value)}
         ></textarea>
-
-        <label>select Space</label>
+        <label className="space-label">select Space</label>
         <select
+          className="space-list"
           value={spaceTitle}
           onChange={(e) => {
             setSpaceTitle(e.target.value);

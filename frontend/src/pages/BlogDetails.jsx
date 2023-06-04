@@ -9,7 +9,11 @@ const BlogDetails = () => {
   const { user } = useAuthContext();
   const { id } = useParams();
   const { owner, isPending, error, blog } = useGetBlog(id, user);
-  const { error: deleteError, handleDelete } = useDeleteBlog(id, user);
+  const { error: deleteError, handleDelete } = useDeleteBlog(
+    id,
+    user,
+    blog?.spaceId,
+  );
   if (isPending) return <p className="loading">Loading...</p>;
   console.log(blog);
 

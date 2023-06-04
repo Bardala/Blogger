@@ -45,7 +45,6 @@ export const useGetDefaultSpace = () => {
 export const useGetSpace = (id) => {
   const spaceId = id || "646c1929ebba035de6f2208c";
   const { user } = useAuthContext();
-  // const { dispatch, blogs } = useBlogContext();
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [space, setSpace] = useState({});
@@ -65,16 +64,14 @@ export const useGetSpace = (id) => {
           },
         );
         const data = await response.json();
-        // const blogs = data.blogs;
         if (response.ok) {
-          // dispatch({ type: "GET-ALL-BLOGS", payload: blogs });
           setSpace(data);
           console.log("Gotten Space", data);
         } else {
           throw Error(data.error);
         }
       } catch (error) {
-        setError(error);
+        setError(error.message);
       }
       setIsPending(false);
     };
@@ -118,4 +115,74 @@ export const useGetUserSpaces = () => {
   }, [user]);
 
   return { spaces, error, isPending };
+};
+
+export const useAddMember = () => {
+  const [error, setError] = useState(null);
+  const [isPending, setIsPending] = useState(false);
+
+  const addMember = async (spaceId, admin, memberId) => {
+    try {
+      setIsPending(true);
+      const response = await fetch(
+        `http://localhost:4000/api/space/${spaceId}/addUser/${memberId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${admin.token}`,
+          },
+          mode: "cors",
+        },
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Added Member: ", data);
+      } else {
+        throw Error(data.error);
+      }
+    } catch (error) {
+      console.log(error);
+      setError(error);
+    }
+    setIsPending(false);
+  };
+  return { error, isPending, addMember };
+};
+
+export const useJoinSpace = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const [error, setError] = useState(null);
+  const [isPending, setIsPending] = useState(false);
+
+  const joinSpace = async (spaceId) => {
+    try {
+      setIsPending(true);
+      const response = await fetch(
+        `http://localhost:4000/api/space/${spaceId}/join`,
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          mode: "cors",
+        },
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Joined Space: ", data);
+      } else {
+        throw Error(data.error);
+      }
+    } catch (error) {
+      console.log(error);
+      setError(error);
+    }
+    setIsPending(false);
+  };
+
+  return { error, isPending, joinSpace };
 };

@@ -44,18 +44,18 @@ const spaceSchema = new Schema({
 });
 
 // Define a cron job that runs every 3 days at 00:00
-const updateInvitationKeyJob = schedule.scheduleJob("0 0 */3 * *", () => {
-  Space.find({}, (err, spaces) => {
-    if (err) {
-      console.error(err);
-    } else {
-      spaces.forEach((space) => {
-        space.invitationKey = crypto.randomBytes(16).toString("hex");
-        space.save();
-      });
-    }
-  });
-});
+// const updateInvitationKeyJob = schedule.scheduleJob("0 0 */3 * *", () => {
+//   Space.find({}, (err, spaces) => {
+//     if (err) {
+//       console.error(err);
+//     } else {
+//       spaces.forEach((space) => {
+//         space.invitationKey = crypto.randomBytes(16).toString("hex");
+//         space.save();
+//       });
+//     }
+//   });
+// });
 
 spaceSchema.pre("save", function (next) {
   if (!this.adminId.includes(this.ownerId)) this.adminId.push(this.ownerId);

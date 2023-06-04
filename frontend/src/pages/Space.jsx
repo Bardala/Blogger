@@ -1,3 +1,4 @@
+import "../styles/space.css";
 import { Link, useParams } from "react-router-dom";
 import BlogList from "../components/BlogList";
 import SpaceInfo from "../components/SpaceInfo";
@@ -7,9 +8,9 @@ const Space = () => {
   const { id } = useParams();
   const { space, error, isPending } = useGetSpace(id);
   const blogs = space.blogs;
-  const { members, adminId: admins, title: spaceTitle, state } = space;
 
   if (isPending) return <p>Loading...</p>;
+  if (error) return <p className="error">{error}</p>;
 
   if (blogs?.length === 0 && !error && !isPending) {
     return (
@@ -24,13 +25,9 @@ const Space = () => {
 
   return (
     <div className="home">
-      {error && <p className="error">{error}</p>}
-      <SpaceInfo
-        members={members}
-        admins={admins}
-        spaceTitle={spaceTitle}
-        state={state}
-      />
+      <div className="space-details">
+        <SpaceInfo space={space} />
+      </div>
       {blogs?.length > 0 && <BlogList blogs={blogs} />}
     </div>
   );

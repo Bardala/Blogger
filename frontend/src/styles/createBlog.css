@@ -1,0 +1,80 @@
+/* create page */
+.create {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.create h4 {
+    font-size: 24px;
+    color: var(--primary);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.create form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.create label {
+    font-size: 16px;
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.create input,
+.create textarea,
+.create select {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.create input:focus,
+.create textarea:focus,
+.create select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.create .title-input {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.create .body-textarea {
+    height: 300px;
+    resize: none;
+}
+
+.create .space-list {
+    font-size: 14px;
+    color: #666;
+}
+
+.create button {
+    width: 200px;
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    background-color: var(--primary);
+    color: white;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.create button:hover {
+    transform: scale(1.05);
+    transition: all 0.3s ease-in-out;
+}
+
+.create button:focus {
+    outline: none;
+}
+
+.create button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

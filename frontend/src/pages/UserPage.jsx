@@ -26,28 +26,28 @@ const PersonalPage = () => {
 
           <UserInfoCard pageOwner={pageOwner} blogsLength={blogs?.length} />
 
-          {user.user.username === pageOwner.username && (
-            <div className="user-spaces">
-              <h2>Spaces</h2>
+          {/* {user.user.username === pageOwner.username && ( */}
+          <div className="user-spaces">
+            <h2>Spaces</h2>
 
-              <div className="user-spaces-list">
-                {pageOwner.spaces &&
-                  Object.keys(pageOwner.spaces).map(
-                    (key) =>
-                      pageOwner.spaces[key].title !== "Default" && (
-                        <div className="space" key={pageOwner.spaces[key]._id}>
-                          <Link
-                            to={`/space/${pageOwner.spaces[key]._id}`}
-                            className="space-link"
-                          >
-                            <p>{pageOwner.spaces[key].title}</p>
-                          </Link>
-                        </div>
-                      ),
-                  )}
-              </div>
+            <div className="user-spaces-list">
+              {pageOwner.spaces &&
+                Object.keys(pageOwner.spaces).map(
+                  (key) =>
+                    pageOwner.spaces[key].title !== "Default" && (
+                      <div className="space" key={pageOwner.spaces[key]._id}>
+                        <Link
+                          to={`/space/${pageOwner.spaces[key]._id}`}
+                          className="space-link"
+                        >
+                          <p>{pageOwner.spaces[key].title}</p>
+                        </Link>
+                      </div>
+                    ),
+                )}
             </div>
-          )}
+          </div>
+          {/* )} */}
 
           {error && <div className="error">{error}</div>}
           {isPending && <p>Loading...</p>}

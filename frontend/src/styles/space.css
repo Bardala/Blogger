@@ -1,0 +1,134 @@
+/* space page */
+.home {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.space-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.space-details {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.space-info h1 {
+    font-size: 24px;
+    color: var(--primary);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+}
+
+.space-info p {
+    font-size: 16px;
+    color: #666;
+}
+
+.space-info .space-meta {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.space-meta p {
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.space-meta p::before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-right: 10px;
+    margin-left: 5px;
+    padding: 2px;
+}
+
+.space-meta .blogs-count::before {
+    background-image:
+        url("https://cdn-icons-png.flaticon.com/512/25/25657.png");
+}
+
+.space-meta .followers-count::before {
+    background-image:
+        url("https://cdn-icons-png.flaticon.com/512/1077/1077035.png");
+}
+
+.space-actions {
+    display: flex;
+    align-items: center;
+}
+
+.space-actions button {
+    padding: 10px 15px;
+    border-radius: 4px;
+    border: none;
+    background-color: var(--primary);
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.not-found {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.not-found p {
+    font-size: 18px;
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.not-found a {
+    text-decoration: none;
+    color: var(--primary);
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.2s ease-in-out;
+}
+
+.not-found a:hover {
+    border-bottom: 2px solid var(--primary);
+}
+
+@media screen and (max-width: 600px) {
+    .space-image {
+        height: 200px;
+    }
+
+    .space-details {
+        flex-direction: column;
+    }
+
+    .space-info h1 {
+        font-size: 20px;
+    }
+
+    .space-info p {
+        font-size: 14px;
+    }
+
+    .space-info .space-meta {
+        flex-wrap: wrap;
+    }
+
+    .space-meta p {
+        margin-bottom: 5px;
+    }
+
+    .space-actions {
+        margin-top: 10px;
+    }
+}

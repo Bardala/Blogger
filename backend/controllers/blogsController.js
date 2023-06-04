@@ -83,8 +83,6 @@ const getBlog = async function (req, res) {
 const deleteBlog = async (req, res) => {
   const user = req.user;
   const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(400).json({ error: "Invalid id" });
 
   try {
     const blog = await Blogs.findById(id);
@@ -107,7 +105,7 @@ const deleteBlog = async (req, res) => {
     await user.blogs.pull(id);
     await user.save();
 
-    res.sendStatus(200);
+    res.status(200).json({});
   } catch (error) {
     console.log("error in delete blog", error);
     res.status(400).json({ error: error.message });

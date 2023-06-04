@@ -135,10 +135,10 @@ export const useGetBlog = (blogId, user) => {
           console.log("blog", data);
           if (data.author === user.username) setOwner(true);
         } else {
-          setError(data.error);
+          throw Error(data.error);
         }
       } catch (error) {
-        setError("Connection Error: " + error.message);
+        setError(error.message);
       } finally {
         setIsPending(false);
       }
@@ -173,7 +173,7 @@ export const useGetUserBlogs = (username) => {
           setBlogs(data);
           console.log("blogs", data);
         } else {
-          setError(data.error);
+          throw Error(data.error);
         }
       } catch (error) {
         setError(error.message);
@@ -187,7 +187,7 @@ export const useGetUserBlogs = (username) => {
   return { error, blogs, isPending };
 };
 
-export const useDeleteBlog = (blogId, user) => {
+export const useDeleteBlog = (blogId, user, spaceId) => {
   const [error, setError] = useState();
   const nav = useNavigate();
 
@@ -196,7 +196,7 @@ export const useDeleteBlog = (blogId, user) => {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/api/blogs/${blogId}`,
+        `http://localhost:4000/api/blogs/${blogId}/delete`,
         {
           method: "DELETE",
           headers: {
@@ -206,16 +206,15 @@ export const useDeleteBlog = (blogId, user) => {
           mode: "cors",
         },
       );
-      const data = response.json();
+      const data = await response.json();
       if (response.ok) {
         console.log("the blog is deleted");
-        nav("/");
+        nav(`/space/${spaceId}`);
       } else {
-        setError(data.error);
-        console.log(data.error);
+        throw Error(data.error);
       }
     } catch (error) {
-      setError("Connection Error: " + error.message);
+      setError(error.message);
     }
   };
 

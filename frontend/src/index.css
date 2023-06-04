@@ -293,7 +293,9 @@ h4 {
   margin: 0 auto;
 }
 
-.create label {
+.title-label,
+.body-label,
+.space-label {
   text-align: left;
   display: block;
 }
@@ -304,8 +306,9 @@ h4 {
   margin-bottom: 30px;
 }
 
-.create input,
-.create textarea {
+.title-input,
+.body-textarea,
+.space-list {
   width: 100%;
   padding: 6px 10px;
   margin: 10px 0;
@@ -316,14 +319,16 @@ h4 {
   display: block;
 }
 
-.create input:hover {
+.title-input:hover,
+.body-textarea:hover,
+.space-list:hover {
   border-color: var(--primary);
   box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
 }
 
-.create textarea:hover {
-  border-color: var(--primary);
-  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+.space-list {
+  background-color: lightblue;
+  font-size: 18px;
 }
 
 .create button {
@@ -408,25 +413,31 @@ input.error {
 }
 
 .user-list h2 {
-  font-size: 20px;
+  font-size: 24px;
   color: var(--primary);
   margin-bottom: 30px;
+  text-align: center;
 }
 
 .user-list li {
-  padding: 10px;
-  border: 1px #ddd;
-  border-radius: 4px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   /* margin: 10px 0; */
   cursor: pointer;
   list-style: none;
   margin-left: 50px;
   margin-right: 50px;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
+  /* increased from 30px */
+  display: flex;
+  align-items: center;
 }
 
+
+
 .user-list li:hover {
-  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
   /* background: #fafafa; */
 }
 
@@ -435,10 +446,19 @@ input.error {
   color: var(--primary);
 }
 
-.counts-container {
+.user-list li .username {
+  font-weight: bold;
+  font-size: 18px;
+  margin-right: 20px;
+}
+
+.user-list li .counts-container {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+  flex-grow: 1;
 }
 
 .counts-container p {
@@ -446,12 +466,61 @@ input.error {
   padding: 0;
   font-size: 14px;
   color: #666;
+  display: flex;
+  align-items: center;
 }
 
 .count-label {
   font-weight: bold;
   margin-right: 5px;
 }
+
+.counts-container p::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-right: 10px;
+  margin-left: 5px;
+  padding: 2px;
+}
+
+.followers-count::before {
+  background-image:
+    url("https://cdn-icons-png.flaticon.com/512/1077/1077035.png");
+}
+
+.blogs-count::before {
+  background-image:
+    url("https://cdn-icons-png.flaticon.com/512/25/25657.png");
+}
+
+.comments-count::before {
+  background-image:
+    url("https://cdn-icons-png.flaticon.com/512/25/25663.png");
+}
+
+@media screen and (max-width: 600px) {
+  .user-list li {
+    flex-direction: column;
+  }
+
+  .user-list li .username {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .user-list li .counts-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .counts-container p {
+    margin-bottom: 5px;
+  }
+}
+
 
 /* user profile */
 .user-profile {
@@ -604,4 +673,28 @@ input.error {
   .space-info p {
     font-size: 12px;
   }
+}
+
+/* Space Actions*/
+.add-member-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-member-button button {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--primary);
+  color: white;
+  cursor: pointer;
+}
+
+.add-member-button button:hover {
+  opacity: 0.8;
+}
+
+.add-member-button .error {
+  color: red;
 }

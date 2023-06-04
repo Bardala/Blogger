@@ -69,7 +69,7 @@ const getSpace = async function (req, res) {
     ).populate("blogs");
 
     if (!space) return res.status(404).json({ error: "Space not found" });
-    if (!space.members.includes(user._id))
+    if (!space.members.includes(user._id) && !space.state === "public")
       return res.status(403).json({ error: `You don't have access` });
 
     res.status(200).json(space);
@@ -107,7 +107,6 @@ const inviteUser = async function (req, res) {
       .status(400)
       .json({ error: "Please provide an email and an invitationKey" });
   try {
-    // find the space and check the invitationKey and expirationDate
     const space = await Space.findById(id);
     if (!space) return res.status(404).json({ error: "Space not found" });
     if (space.invitationKey !== invitationKey)
@@ -115,54 +114,81 @@ const inviteUser = async function (req, res) {
     if (space.expirationDate < new Date())
       return res.status(401).json({ error: "InvitationKey expired" });
 
-    // find the user by email and check if they are already a member
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: "User not found" });
     if (space.members.includes(user._id))
       return res.status(409).json({ error: "User already a member" });
 
-    // add the user to the space members and the space to the user spaces
     space.members.push(user._id);
     user.spaces.push(space._id);
 
-    // save the updated documents
     await space.save();
     await user.save();
 
-    // send a success response with the updated space
     res.status(200).json(space);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-// join a space by id and invitationKey(checked)
+// join to public space
 const joinSpace = async function (req, res) {
   const user = req.user;
-  console.log(user);
-  const { invitationKey } = req.body;
-  if (!invitationKey)
-    return res.status(400).json({ error: "Please provide an invitationKey" });
+  const { spaceId } = req.params;
+  console.log("spaceId", spaceId);
   try {
-    const space = await Space.findOne({ invitationKey });
-    if (!space) return res.status(401).json({ error: "Invalid invitationKey" });
-    if (space.expirationDate < new Date())
-      return res.status(401).json({ error: "InvitationKey expired" });
-
-    // get the current user from the request and check if they are already a member
+    const space = await Space.findById(spaceId);
+    if (!space) return res.status(401).json({ error: "Space not found" });
+    console.log("space", space);
 
     if (space.members.includes(user._id))
       return res.status(409).json({ error: "User already a member" });
 
-    // add the user to the space members and the space to the user spaces
     space.members.push(user._id);
     user.spaces.push(space._id);
 
-    // save the updated documents
     await space.save();
     await user.save();
 
-    // send a success response with the updated space
+    res.status(200).json(space);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const addUser = async (req, res) => {
+  const user = req.user;
+  const { spaceId, memberId } = req.params;
+
+  console.log("spaceId", spaceId);
+  console.log("memberId", memberId);
+
+  if (!memberId || !spaceId)
+    return res
+      .status(400)
+      .json({ error: "Please provide a member id and a space id" });
+
+  try {
+    const newMember = await User.findById(memberId, "spaces _id");
+    const space = await Space.findById(spaceId, "members adminId");
+
+    if (!newMember) return res.status(404).json({ error: "User not found" });
+    if (!space) return res.status(404).json({ error: "Space not found" });
+
+    const admins = space.adminId.map((admin) => admin?.toString());
+    const members = space.members.map((member) => member?.toString());
+
+    if (!admins.includes(user._id.toString()))
+      return res.status(403).json({ error: "You are not an admin" });
+    if (members.includes(memberId))
+      return res.status(409).json({ error: "User already a member" });
+
+    space.members.push(memberId);
+    await space.save();
+
+    newMember.spaces.push(spaceId);
+    await newMember.save();
+
     res.status(200).json(space);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -205,6 +231,7 @@ const getUserSpaces = async (req, res) => {
 };
 
 module.exports = {
+  addUser,
   getUserSpaces,
   getDefaultSpace,
   getAllSpaces,

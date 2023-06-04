@@ -1,14 +1,14 @@
-const SpaceInfo = ({ members, admins, spaceTitle, state }) => {
+import React from "react";
+import SpaceActions from "./SpaceActions";
+
+const SpaceInfo = ({ space }) => {
   return (
     <div className="space-info">
-      <h1>{spaceTitle}</h1>
-      <p>State: {state}</p>
-      {members?.length > 0 && (
-        <p>Members: {members.map((member) => member).join(", ")}</p>
-      )}
-      {admins?.length > 0 && (
-        <p>Admins: {admins.map((admin) => admin).join(", ")}</p>
-      )}
+      <h1 className="space-title">{space.title}</h1> {/* added this line */}
+      <p>{space.state} Space</p>
+      {space.members?.length > 0 && <p>{space.members.length} Members</p>}
+      {space.adminId?.length > 0 && <p>{space.adminId.length} Admins</p>}
+      <SpaceActions space={space} />
     </div>
   );
 };

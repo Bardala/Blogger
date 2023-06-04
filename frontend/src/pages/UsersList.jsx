@@ -13,17 +13,19 @@ const UsersList = () => {
         {users &&
           users.map((user) => (
             <li key={user._id}>
-              <Link to={`/users/${user.username}`}>{user.username}</Link>
-              <div className="counts-container">
-                <p className="followers-count">
-                  {" "}
-                  {user.followers.length} followers{" "}
-                </p>
-                <p className="blogs-count">{user.blogs.length} blogs</p>
-                <p className="comments-count">
-                  {user.comments.length} comments
-                </p>
-              </div>
+              <Link to={`/users/${user.username}`}>
+                <p className="username">{user.username}</p>
+                <div className="counts-container">
+                  <p className="followers-count">
+                    {" "}
+                    {user.followers.length} followers{" "}
+                  </p>
+                  <p className="blogs-count">{user.blogs.length} blogs</p>
+                  <p className="comments-count">
+                    {user.comments.length} comments
+                  </p>
+                </div>
+              </Link>
             </li>
           ))}
       </ul>
