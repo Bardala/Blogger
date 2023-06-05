@@ -6,31 +6,30 @@ Blogger is a full-stack web application that allows users to create and share bl
 
 - User authentication and registration with JWT
 - Post creation, editing, and deletion with CRUD operations
-- Comment creation, editing, and deletion with CRUD operations
+- Comment creation, and deletion with CRUD operations
 - Markdown support for posts and comments with React Markdown
 - Error handling with custom error messages
 - React context API for state management and global state access with useContext and useReducer hooks
 - React hooks for functional components
 - Responsive design to work on all screen sizes
 
-## Installation
-
-1. Clone the repository.
-2. Install dependencies with `npm install`.
-3. Start the frontend with `cd frontend` and `npm start`.
-4. Start the backend with `cd backend` and `npm start`.
-
 ## Usage
 
-To use Blogger, you need to register an account or log in with an existing one.
+- To use Blogger, you need to register an account or log in with an existing one.
 
-Once logged in, you can create a new blog by clicking on the "New Blog" button on the navbar. You can delete your own blogs by clicking on the corresponding button on the blog detail page.
+- Once logged in, you can create a new blog by clicking on the "New Blog" button in your profile page. You can see the list of all blogs by clicking on the "Home" button on the navbar.
 
-You can also comment on any blog by clicking on the "Add Comment" button on the blog detail page.
+- You can see your profile page by clicking on your name on the navbar.
 
-You can see your profile page by clicking on your name on the navbar. You can see the list of all users by clicking on the "Users" button on the navbar.
+- You can also comment on any blog by clicking on the "Add Comment" button on the blog detail page.
 
-You can use Markdown syntax to format your posts and comments. For example, you can use `**bold**` for bold text, `*italic*` for italic text, `# Heading` for headings, etc. You can find more information about Markdown here: https://www.markdownguide.org/basic-syntax/
+- You can like a blog by clicking on the "Like" button on the blog detail page or on the "Like" button in the list of all blogs.
+
+- You can see your profile page by clicking on your name on the navbar. You can see the list of all users by clicking on the "Users" button on the navbar.
+
+- You can use Markdown syntax to format your posts and comments. For example, you can use `**bold**` for bold text, `*italic*` for italic text, `# Heading` for headings, etc. You can find more information about Markdown here: https://www.markdownguide.org/basic-syntax/
+
+- You can follow and unfollow other users by clicking on the "Follow" button on their profile page.
 
 ## Pages
 
@@ -74,7 +73,16 @@ You can use Markdown syntax to format your posts and comments. For example, you 
 
 <img src="./web-cap/DeleteBlog.png" width="200" height="100" alt="Delete Blog" title="Delete Blog">
 
+### Space page
+
+ <img src="./web-cap/Space.png" alt="Space" title="Space page">
+ <img src="./web-cap/Space2.png" alt="Space" title="Space page">
+
+
 ### Profile page
+
+<img src="./web-cap/PersonalPage.png" alt="Profile" title="Profile page">
+<img src="./web-cap/PersonalPage2.png" alt="Profile" title="Profile page">
 
 - List of all posts with their title, date of creation, and number of comments
 - Click on the title of the post to see the post detail page
@@ -90,6 +98,7 @@ You can use Markdown syntax to format your posts and comments. For example, you 
 ### User profile page
 
 <img src="./web-cap/UserPage.png" alt="User page" title="User page">
+<img src="./web-cap/UserPage2.png" alt="User page" title="User page">
 
 - Name, email address, date of registration, and list of all posts with their title, date of creation, and number of comments
 - Click on the title of the post to see the post detail page

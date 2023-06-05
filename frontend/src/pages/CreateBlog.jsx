@@ -40,6 +40,7 @@ const CreateBlog = () => {
           value={body}
           onChange={(e) => setBody(e.target.value)}
         ></textarea>
+
         <label className="space-label">select Space</label>
         <select
           className="space-list"

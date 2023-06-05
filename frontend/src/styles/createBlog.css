@@ -1,12 +1,13 @@
 /* create page */
 .create {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
 }
 
 .create h4 {
     font-size: 24px;
-    color: var(--primary);
+    color: var(–primary);
     margin-bottom: 20px;
     text-align: center;
 }
@@ -19,7 +20,7 @@
 
 .create label {
     font-size: 16px;
-    color: var(--primary);
+    color: var(–primary);
     margin-bottom: 10px;
 }
 
@@ -30,13 +31,16 @@
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
 }
 
 .create input:focus,
 .create textarea:focus,
 .create select:focus {
     outline: none;
-    border-color: var(--primary);
+    border-color: var(–primary);
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .create .title-input {
@@ -59,7 +63,7 @@
     padding: 10px;
     border-radius: 4px;
     border: none;
-    background-color: var(--primary);
+    background-color: var(–primary);
     color: white;
     cursor: pointer;
     margin-top: 20px;
@@ -77,4 +81,78 @@
 .create button[disabled] {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.space-label label {
+    margin: 10px 0;
+    padding: 5px;
+}
+
+.space-list {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.space-list input[type=“checkbox”] {
+    display: none;
+}
+
+.space-list label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+}
+
+.space-list label::before {
+    content: “”;
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.space-list input[type=“checkbox”]:checked+label::before {
+    content: “✔”;
+    color: white;
+    background-color: var(–primary);
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.space-list input[type=“checkbox”]:focus+label::before {
+    outline: none;
+    border-color: var(–primary);
+}
+
+@media screen and (max-width: 600px) {
+    .create {
+        max-width: 90%;
+    }
+
+    .create input,
+    .create textarea,
+    .create select {
+        width: 95%;
+    }
+
+    .create button {
+        width: 150px;
+    }
+
+    .space-list label {
+        font-size: 12px;
+    }
+
+    .space-list {
+        flex-wrap: wrap;
+        margin: 10px 0;
+        padding: 5px;
+    }
+
 }

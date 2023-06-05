@@ -1,28 +1,22 @@
-/* Import a font from Google Fonts */
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
-/* Use a light green background for the body */
 body {
     background-color: #e6f9e8;
     font-family: 'Roboto', sans-serif;
 }
 
-/* Use a dark green color for the headings */
 h2 {
     color: #2a9d8f;
 }
 
-/* Use a brown color for the author name and link */
 .author-name {
     color: #6b705c;
 }
 
-/* Use a lighter brown color for the link when hovered */
 .author-name a:hover {
     color: #a5a58d;
 }
 
-/* Use a grid layout for the blog content */
 .blog-content {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -30,7 +24,6 @@ h2 {
     margin: 20px;
 }
 
-/* Use a white background and some padding for the article */
 article {
     background-color: white;
     padding: 20px;
@@ -38,28 +31,23 @@ article {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Use a dark green color for the blog body */
 .blog-body {
     color: #264653;
 }
 
-/* Use a flexbox layout for the blog meta */
 .blog-meta {
     display: flex;
     align-items: center;
 }
 
-/* Use some margin for the blog meta elements */
 .blog-meta p {
     margin-right: 10px;
 }
 
-/* Use a brown color for the created at date */
 .created-at {
     color: #6b705c;
 }
 
-/* Use a green color for the like button */
 .like-button {
     background-color: #2a9d8f;
     border: none;
@@ -68,17 +56,14 @@ article {
     color: white;
 }
 
-/* Use a lighter green color for the like button when hovered */
 .like-button:hover {
     background-color: #80cbc4;
 }
 
-/* Use a brown color for the comments count */
 .comments-counts {
     color: #6b705c;
 }
 
-/* Use a red color for the delete button */
 .delete-button {
     background-color: #e76f51;
     border: none;
@@ -87,7 +72,6 @@ article {
     color: white;
 }
 
-/* Use a lighter red color for the delete button when hovered */
 .delete-button:hover {
     background-color: #ffab91;
 }

@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import Comments from "../components/Comments";
 import formatDistantToNow from "date-fns/formatDistanceToNow";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import Markdown from "markdown-to-jsx";
 import BlogDetailsAction from "../components/BlogDetailsAction";
 import { useGetBlog } from "../hooks/blogsApis";
 
@@ -33,8 +33,7 @@ const BlogDetails = () => {
                   <strong>{blog.author}</strong>
                 </Link>
               </div>
-
-              <ReactMarkdown className="blog-body">{blog.body}</ReactMarkdown>
+              <Markdown className="blog-body">{blog.body}</Markdown>
 
               <div className="blog-meta">
                 <p className="created-at">

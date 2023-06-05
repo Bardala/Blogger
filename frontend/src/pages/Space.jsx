@@ -12,23 +12,19 @@ const Space = () => {
   if (isPending) return <p>Loading...</p>;
   if (error) return <p className="error">{error}</p>;
 
-  if (blogs?.length === 0 && !error && !isPending) {
-    return (
-      <>
-        <div className="not-found">
-          <p>There isn't blogs</p>
-          <Link to="/createBlog">Click here to create a blog</Link>
-        </div>
-      </>
-    );
-  }
-
   return (
     <div className="home">
       <div className="space-details">
         <SpaceInfo space={space} />
       </div>
-      {blogs?.length > 0 && <BlogList blogs={blogs} />}
+      {blogs?.length > 0 ? (
+        <BlogList blogs={blogs} />
+      ) : (
+        <div className="not-found">
+          <p>There isn't blogs</p>
+          <Link to="/createBlog">Click here to create a blog</Link>
+        </div>
+      )}
     </div>
   );
 };

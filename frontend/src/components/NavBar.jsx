@@ -1,3 +1,5 @@
+import "../styles/navbar.css";
+
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLogout } from "../hooks/authHooks";
