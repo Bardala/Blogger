@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const Blogs = require("../models/blogModel");
 const Space = require("../models/spaceModel");
 const Comments = require("../models/commentModel");
+const Likes = require("../models/likesModel");
 const mongoose = require("mongoose");
 
 // get all blogs(checked)
@@ -66,14 +67,22 @@ const createBlog = async function (req, res) {
 // get a blog(checked)
 const getBlog = async function (req, res) {
   const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "no such blog" });
-  }
 
   try {
     const blog = await Blogs.findById(id).populate("comments");
     if (!blog) return res.status(400).json({ error: "No such blog" });
     res.status(200).json(blog);
+    /**
+     const blog = await Blogs.findById(id);
+    if (!blog) return res.status(400).json({ error: "No such blog" });
+
+    const [likes, comments] = await Promise.all([
+      Likes.find({ blogId: id }),
+      Comments.find({ blogId: id }),
+    ]);
+
+    res.status(200).json({ ...blog._doc, comments, likes });
+     */
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

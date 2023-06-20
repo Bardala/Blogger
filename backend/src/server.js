@@ -9,6 +9,7 @@ const commentsRouts = require("./routes/comments");
 const blogRouts = require("./routes/blog");
 const userRoutes = require("./routes/user");
 const middleware = require("./routes/middleware");
+// const likesRoutes = require("./routes/likes");
 const app = express();
 
 mongoose
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 
 app.use("/api", authRoutes);
 app.use(middleware);
+// app.use("/api", likesRoutes);
 app.use("/api", spaceRoutes);
 app.use("/api", blogRouts);
 app.use("/api", commentsRouts);

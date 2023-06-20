@@ -82,7 +82,9 @@ export const useCreateBlog = () => {
         if (res.ok) {
           setIsPending(false);
           console.log("new blog added");
-          nav(`/space/${spaceId}`);
+          spaceId === "646c1929ebba035de6f2208c"
+            ? nav("/")
+            : nav(`/space/${spaceId}`);
         } else {
           setError(data.error);
           console.log(data.error);
@@ -247,6 +249,7 @@ export const usePostLike = () => {
         setLikes(data.likes);
       } else {
         throw Error(data.error);
+        // throw Error(response.statusText);
       }
     } catch (error) {
       setError(error.message);

@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 const date = new Date();
 const Schema = mongoose.Schema;
-const schedule = require("node-schedule");
 
 const spaceSchema = new Schema({
   title: {
@@ -23,7 +22,7 @@ const spaceSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      // required: true,
     },
   ],
   blogs: [{ type: Schema.Types.ObjectId, ref: "Blog" }],
@@ -42,20 +41,6 @@ const spaceSchema = new Schema({
     },
   },
 });
-
-// Define a cron job that runs every 3 days at 00:00
-// const updateInvitationKeyJob = schedule.scheduleJob("0 0 */3 * *", () => {
-//   Space.find({}, (err, spaces) => {
-//     if (err) {
-//       console.error(err);
-//     } else {
-//       spaces.forEach((space) => {
-//         space.invitationKey = crypto.randomBytes(16).toString("hex");
-//         space.save();
-//       });
-//     }
-//   });
-// });
 
 spaceSchema.pre("save", function (next) {
   if (!this.adminId.includes(this.ownerId)) this.adminId.push(this.ownerId);
