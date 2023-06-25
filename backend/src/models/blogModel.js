@@ -24,14 +24,14 @@ const blogSchema = new Schema(
       ref: "Space",
       required: true,
     },
-    likes: {
-      type: Number,
-      default: 0,
-      validate: {
-        validator: (val) => val >= 0,
-        message: "Like value can't be negative",
-      },
-    },
+    // likes: {
+    //   type: Number,
+    //   default: 0,
+    //   validate: {
+    //     validator: (val) => val >= 0,
+    //     message: "Like value can't be negative",
+    //   },
+    // },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   },
   { timestamps: true },

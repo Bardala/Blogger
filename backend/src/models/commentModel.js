@@ -16,14 +16,14 @@ const commentSchema = new Schema(
       ref: "User",
       required: true,
     },
-    likes: {
-      type: Number,
-      default: 0,
-      validate: {
-        validator: (val) => val >= 0,
-        message: "Like values can't be negative",
-      },
-    },
+    // likes: {
+    //   type: Number,
+    //   default: 0,
+    //   validate: {
+    //     validator: (val) => val >= 0,
+    //     message: "Like values can't be negative",
+    //   },
+    // },
   },
   { timestamps: true },
 );

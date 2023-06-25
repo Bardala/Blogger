@@ -3,11 +3,34 @@ const Blogs = require("../models/blogModel");
 const Space = require("../models/spaceModel");
 const Comments = require("../models/commentModel");
 const Likes = require("../models/likesModel");
-const mongoose = require("mongoose");
+
+async function getBlogs() {
+  return Blogs.aggregate([
+    { $match: {} },
+    {
+      $lookup: {
+        from: "likes",
+        localField: "_id",
+        foreignField: "blogId",
+        as: "likes",
+      },
+    },
+    {
+      $lookup: {
+        from: "comments",
+        localField: "_id",
+        foreignField: "blogId",
+        as: "comments",
+      },
+    },
+  ]);
+}
 
 // get all blogs(checked)
 const getAllBlogs = async function (req, res) {
-  const blogs = await Blogs.find({}).populate("comments");
+  await Blogs.updateMany({}, { $unset: { comments: 1 } });
+
+  const blogs = await getBlogs();
   res.status(200).json({ blogs });
 };
 
@@ -69,11 +92,10 @@ const getBlog = async function (req, res) {
   const { id } = req.params;
 
   try {
-    const blog = await Blogs.findById(id).populate("comments");
-    if (!blog) return res.status(400).json({ error: "No such blog" });
-    res.status(200).json(blog);
-    /**
-     const blog = await Blogs.findById(id);
+    // const blog = await Blogs.findById(id).populate("comments");
+    // if (!blog) return res.status(400).json({ error: "No such blog" });
+    // res.status(200).json(blog);
+    const blog = await Blogs.findById(id);
     if (!blog) return res.status(400).json({ error: "No such blog" });
 
     const [likes, comments] = await Promise.all([
@@ -82,7 +104,6 @@ const getBlog = async function (req, res) {
     ]);
 
     res.status(200).json({ ...blog._doc, comments, likes });
-     */
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -95,12 +116,12 @@ const deleteBlog = async (req, res) => {
 
   try {
     const blog = await Blogs.findById(id);
-    const space = await Space.findById(blog.spaceId);
-
     if (!blog)
       return res
-        .status(400)
+        .status(404)
         .json({ error: "The blog which try to delete it is not exist" });
+
+    const space = await Space.findById(blog.spaceId);
 
     if (JSON.stringify(blog.authorId) !== JSON.stringify(user._id))
       return res.status(403).json({ error: "You do not have permission" });
