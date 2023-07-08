@@ -15,22 +15,18 @@ const getAllBlogs = async function (req, res) {
 const getBlogsByUsername = async function (req, res) {
   const username = req.params.username;
 
-  try {
-    const user = await User.findOne({ username });
-    console.log(user._id);
+  const user = await User.findOne({ username });
+  console.log(user._id);
 
-    if (!user) return res.status(404).json({ error: "User not found" });
+  if (!user) return res.status(404).json({ error: "User not found" });
 
-    const blogs = await Blogs.find({ authorId: user._id })
-      .sort({
-        createdAt: -1,
-      })
-      .populate("comments");
+  const blogs = await Blogs.find({ authorId: user._id })
+    .sort({
+      createdAt: -1,
+    })
+    .populate("comments");
 
-    res.status(200).json(blogs);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
+  res.status(200).json(blogs);
 };
 
 // post a blog(checked)
@@ -43,36 +39,31 @@ const createBlog = async function (req, res) {
   if (!body || !title)
     return res.status(400).json({ error: "Please fill all fields" });
 
-  try {
-    let space = await Space.findById(spaceId);
+  let space = await Space.findById(spaceId);
 
-    if (!space) return res.status(400).json({ error: "No such space" });
-    if (!space.members.includes(authorId))
-      return res.status(403).json({ error: "You do not have permission" });
+  if (!space) return res.status(400).json({ error: "No such space" });
+  if (!space.members.includes(authorId))
+    return res.status(403).json({ error: "You do not have permission" });
 
-    const blog = await Blogs.create({ title, body, authorId, author, spaceId });
+  const blog = await Blogs.create({ title, body, authorId, author, spaceId });
 
-    space.blogs.push(blog._id);
-    await space.save();
+  space.blogs.push(blog._id);
+  await space.save();
 
-    user.blogs.push(blog._id);
-    await user.save();
+  user.blogs.push(blog._id);
+  await user.save();
 
-    res.status(200).json({ blog });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
+  res.status(200).json({ blog });
 };
 
 // get a blog(checked)
 const getBlog = async function (req, res) {
   const { id } = req.params;
 
-  try {
-    const blog = await Blogs.findById(id).populate("comments");
-    if (!blog) return res.status(400).json({ error: "No such blog" });
-    res.status(200).json(blog);
-    /**
+  const blog = await Blogs.findById(id).populate("comments");
+  if (!blog) return res.status(400).json({ error: "No such blog" });
+  res.status(200).json(blog);
+  /**
      const blog = await Blogs.findById(id);
     if (!blog) return res.status(400).json({ error: "No such blog" });
 
@@ -83,9 +74,6 @@ const getBlog = async function (req, res) {
 
     res.status(200).json({ ...blog._doc, comments, likes });
      */
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
 };
 
 // delete a blog(checked)
@@ -93,46 +81,36 @@ const deleteBlog = async (req, res) => {
   const user = req.user;
   const { id } = req.params;
 
-  try {
-    const blog = await Blogs.findById(id);
-    const space = await Space.findById(blog.spaceId);
+  const blog = await Blogs.findById(id);
+  if (!blog)
+    return res
+      .status(400)
+      .json({ error: "The blog which try to delete it is not exist" });
 
-    if (!blog)
-      return res
-        .status(400)
-        .json({ error: "The blog which try to delete it is not exist" });
+  const space = await Space.findById(blog.spaceId);
+  if (JSON.stringify(blog.authorId) !== JSON.stringify(user._id))
+    return res.status(403).json({ error: "You do not have permission" });
 
-    if (JSON.stringify(blog.authorId) !== JSON.stringify(user._id))
-      return res.status(403).json({ error: "You do not have permission" });
+  await Blogs.findOneAndDelete({ _id: id });
+  await Comments.deleteMany({ blogId: id });
 
-    await Blogs.findOneAndDelete({ _id: id });
-    await Comments.deleteMany({ blogId: id });
+  await space.blogs.pull(id);
+  await space.save();
 
-    await space.blogs.pull(id);
-    await space.save();
+  await user.blogs.pull(id);
+  await user.save();
 
-    await user.blogs.pull(id);
-    await user.save();
-
-    res.status(200).json({});
-  } catch (error) {
-    console.log("error in delete blog", error);
-    res.status(400).json({ error: error.message });
-  }
+  res.status(200).json({});
 };
 
 const likeBlog = async (req, res) => {
   const { id } = req.params;
-  try {
-    const blog = await Blogs.findById(id);
-    if (!blog) return res.status(400).json({ error: "No such blog" });
-    blog.likes += 1;
-    await blog.save();
-    res.status(200).json(blog);
-  } catch (error) {
-    console.log("error in like blog", error);
-    res.status(400).json({ error: error.message });
-  }
+
+  const blog = await Blogs.findById(id);
+  if (!blog) return res.status(400).json({ error: "No such blog" });
+  blog.likes += 1;
+  await blog.save();
+  res.status(200).json(blog);
 };
 
 module.exports = {

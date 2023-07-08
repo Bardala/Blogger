@@ -9,6 +9,8 @@ const commentsRouts = require("./routes/comments");
 const blogRouts = require("./routes/blog");
 const userRoutes = require("./routes/user");
 const middleware = require("./routes/middleware");
+const asyncHandler = require("express-async-handler");
+const { errorHandler } = require("./middleware/errorHandler");
 // const likesRoutes = require("./routes/likes");
 const app = express();
 
@@ -28,10 +30,13 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api", authRoutes);
-app.use(middleware);
-// app.use("/api", likesRoutes);
-app.use("/api", spaceRoutes);
-app.use("/api", blogRouts);
-app.use("/api", commentsRouts);
-app.use("/api", userRoutes);
+app.use("/api", asyncHandler(authRoutes));
+app.use(asyncHandler(middleware));
+// app.use("/api", asyncHandler(likesRoutes));
+app.use("/api", asyncHandler(spaceRoutes));
+app.use("/api", asyncHandler(blogRouts));
+app.use("/api", asyncHandler(commentsRouts));
+app.use("/api", asyncHandler(userRoutes));
+app.use("/api", asyncHandler(userRoutes));
+
+app.use(errorHandler);
