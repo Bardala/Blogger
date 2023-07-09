@@ -11,7 +11,6 @@ const getAllBlogs = async function (req, res) {
   res.status(200).json({ blogs });
 };
 
-// get blogs by username(checked)
 const getBlogsByUsername = async function (req, res) {
   const username = req.params.username;
 
@@ -29,7 +28,6 @@ const getBlogsByUsername = async function (req, res) {
   res.status(200).json(blogs);
 };
 
-// post a blog(checked)
 const createBlog = async function (req, res) {
   let { title, body, spaceId } = req.body;
   const user = req.user;

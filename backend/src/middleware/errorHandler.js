@@ -12,7 +12,7 @@ const errorHandler = (err, req, res, next) => {
   // }
 
   // return res.status(500).send("Internal Server Error");
-  res.status(500).json({ error: err.message });
+  return res.status(500).json({ error: err.message });
 };
 
 module.exports = {

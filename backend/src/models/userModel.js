@@ -65,5 +65,6 @@ async function addUserToDefaultSpace(user) {
   if (!space) throw Error("Default space not found");
 
   user.spaces.push(space._id);
+  await user.save();
 }
 module.exports = mongoose.model("User", UserSchema);

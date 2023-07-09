@@ -3,6 +3,7 @@ const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const Blogs = require("../models/blogModel");
 const Comments = require("../models/commentModel");
+const Space = require("../models/spaceModel");
 // helper functions
 const createToken = (_id) =>
   jwt.sign({ _id }, process.env.SECRET, { expiresIn: "30d" });
@@ -111,7 +112,32 @@ const unfollowUser = async (req, res) => {
   res.status(200).json({ currentUser, userToUnfollow });
 };
 
+// Inefficient way because it will iterate through all the spaces members in db
+// Just for DEV purposes
+const deleteUser = async (req, res) => {
+  const user = await User.findByIdAndDelete(req.params.id);
+  if (!user) return res.status(404).json({ error: "User not found" });
+  if (user.blogs.length > 0) await Blogs.deleteMany({ userId: user._id });
+  if (user.comments.length > 0)
+    await Comments.deleteMany({ author: user.username });
+
+  if (user.spaces.length > 0)
+    if (user.followers.length > 0 || user.following.length > 0)
+      await User.updateMany(
+        { $or: [{ followers: user._id }, { following: user._id }] },
+        { $pull: { followers: user._id, following: user._id } },
+      );
+
+  await Space.updateMany(
+    { members: user._id },
+    { $pull: { members: user._id } },
+  );
+
+  res.status(200).json({ message: "User deleted successfully" });
+};
+
 module.exports = {
+  deleteUser,
   getUserById,
   signup,
   login,

@@ -1,3 +1,5 @@
+const asyncHandler = require("express-async-handler");
+
 const {
   createComment,
   getComments,
@@ -5,7 +7,7 @@ const {
 const express = require("express");
 const router = express.Router();
 
-router.post("/createComment", createComment);
-router.get("/getComments", getComments);
+router.post("/createComment", asyncHandler(createComment));
+router.get("/getComments", asyncHandler(getComments));
 
 module.exports = router;

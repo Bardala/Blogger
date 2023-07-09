@@ -30,13 +30,13 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api", asyncHandler(authRoutes));
-app.use(asyncHandler(middleware));
+app.use("/api", authRoutes);
+app.use(middleware);
 // app.use("/api", asyncHandler(likesRoutes));
-app.use("/api", asyncHandler(spaceRoutes));
-app.use("/api", asyncHandler(blogRouts));
-app.use("/api", asyncHandler(commentsRouts));
-app.use("/api", asyncHandler(userRoutes));
-app.use("/api", asyncHandler(userRoutes));
+app.use("/api", spaceRoutes);
+app.use("/api", blogRouts);
+app.use("/api", commentsRouts);
+app.use("/api", userRoutes);
+app.use("/api", userRoutes);
 
 app.use(errorHandler);

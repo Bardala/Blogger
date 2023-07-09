@@ -1,3 +1,5 @@
+const asyncHandler = require("express-async-handler");
+
 const {
   createSpace,
   getSpace,
@@ -14,15 +16,15 @@ const {
 const express = require("express");
 const router = express.Router();
 
-router.post("/space/:spaceId/addUser/:memberId", addUser);
-router.get("/getUserSpaces", getUserSpaces);
-router.get("/getDefaultSpace", getDefaultSpace);
-router.get("/getAllSpaces", getAllSpaces);
-router.post("/createSpace", createSpace);
-router.get("/getSpace/:id", getSpace);
-router.put("/updateSpace/:id", updateSpace);
-router.delete("/deleteSpace/:id", deleteSpace);
-router.post("/inviteToSpace/:id/invite", inviteUser);
-router.post("/space/:spaceId/join", joinSpace);
+router.post("/space/:spaceId/addUser/:memberId", asyncHandler(addUser));
+router.get("/getUserSpaces", asyncHandler(getUserSpaces));
+router.get("/getDefaultSpace", asyncHandler(getDefaultSpace));
+router.get("/getAllSpaces", asyncHandler(getAllSpaces));
+router.post("/createSpace", asyncHandler(createSpace));
+router.get("/getSpace/:id", asyncHandler(getSpace));
+router.put("/updateSpace/:id", asyncHandler(updateSpace));
+router.delete("/deleteSpace/:id", asyncHandler(deleteSpace));
+router.post("/inviteToSpace/:id/invite", asyncHandler(inviteUser));
+router.post("/space/:spaceId/join", asyncHandler(joinSpace));
 
 module.exports = router;
