@@ -1,4 +1,4 @@
-ERD:
+<!-- ERD:
 
 User schema:
 
@@ -66,4 +66,4 @@ Follows schema:
 | FollowerId | STRING/UUID |
 | FolloweeId | STRING/UUID |
 | CreatedAt  | DATE        |
-| UpdatedAt  | DATE        |
+| UpdatedAt  | DATE        | -->

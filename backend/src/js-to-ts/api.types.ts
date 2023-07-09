@@ -4,16 +4,30 @@ import { Blog, Comment, Space, User } from "./dataStore/types";
  ** I am trying here to translate master's controllers types with some changes
  */
 
+//* User APIs
+export type SignUpReq = Pick<User, "email" | "password" | "username">;
+export interface SignUpRes {
+  jwt: string;
+}
+
+export interface LoginReq {
+  login: string;
+  password: string;
+}
+export interface LoginRes {
+  jwt: string;
+}
+
 // * Blog APIs
 // createBlog
 export type CreateBlogReq = Pick<Blog, "title" | "content" | "spaceId">;
 export interface CreateBlogRes {}
 
 // getAllBlogs
+export interface ListBlogsReq {}
 export interface ListBlogRes {
   blogs: Blog[];
 }
-export interface ListBlogsReq {}
 
 // getBlog
 export interface BlogReq {} // the id will be included in params
@@ -26,15 +40,15 @@ export interface BlogRes {
 export interface DeleteBlogReq {}
 export interface DeleteBlogRes {}
 
-// likeBlog
-export interface LikeBlogReq {}
-export interface LikeBlogRes {}
-
 // getBlogsByUsername
 export interface UserBlogsReq {}
 export interface UserBlogsRes {
   blogs: Blog[];
 }
+
+// likeBlog
+export interface LikeBlogReq {}
+export interface LikeBlogRes {}
 
 // * Comment APIs
 // createComment
@@ -83,7 +97,9 @@ export interface SpaceRes {
 
 // updateSpace
 export type UpdateSpaceReq = Pick<Space, "description" | "name" | "status">;
-export interface UpdateSpaceRes {}
+export interface UpdateSpaceRes {
+  space: Space;
+}
 
 // joinSpace
 export interface JoinSpaceReq {}

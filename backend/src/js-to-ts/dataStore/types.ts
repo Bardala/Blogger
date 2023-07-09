@@ -41,6 +41,12 @@ export interface User {
   password: string;
 }
 
+export interface Like {
+  id: string;
+  blogId: string;
+  userId: string;
+}
+
 export interface JwtObject {
   userId: string;
 }
