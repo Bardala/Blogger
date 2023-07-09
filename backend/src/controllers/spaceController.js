@@ -12,6 +12,7 @@ async function checkoutIsTitleExist(title) {
     );
 }
 
+//done1
 const getAllSpaces = async function (req, res) {
   try {
     const spaces = await Space.find({});
@@ -21,6 +22,7 @@ const getAllSpaces = async function (req, res) {
   }
 };
 
+//done1
 const createSpace = async function (req, res) {
   const { title, state } = req.body;
   const user = req.user;
@@ -42,6 +44,7 @@ const createSpace = async function (req, res) {
   }
 };
 
+// done1
 const getDefaultSpace = async function (req, res) {
   try {
     const space = await Space.findById("646c1929ebba035de6f2208c").populate(
@@ -57,6 +60,7 @@ const getDefaultSpace = async function (req, res) {
   }
 };
 
+// done1
 const getSpace = async function (req, res) {
   const user = req.user;
   const { id } = req.params;
@@ -79,6 +83,7 @@ const getSpace = async function (req, res) {
   }
 };
 
+// done1
 const updateSpace = async function (req, res) {
   const { id } = req.params;
   const { title, state } = req.body;
@@ -132,6 +137,7 @@ const inviteUser = async function (req, res) {
   }
 };
 
+// done1
 // join to public space
 const joinSpace = async function (req, res) {
   const user = req.user;
@@ -157,6 +163,7 @@ const joinSpace = async function (req, res) {
   }
 };
 
+// done1
 const addUser = async (req, res) => {
   const user = req.user;
   const { spaceId, memberId } = req.params;
@@ -196,7 +203,7 @@ const addUser = async (req, res) => {
   }
 };
 
-// delete a space by id(checked)
+// done1
 const deleteSpace = async function (req, res) {
   const { id } = req.params;
   if (!id) return res.status(400).json({ error: "Please provide an id" });
@@ -215,6 +222,7 @@ const deleteSpace = async function (req, res) {
   }
 };
 
+// done1
 const getUserSpaces = async (req, res) => {
   const user = req.user;
   const spacesIds = [...user.spaces];

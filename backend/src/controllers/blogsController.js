@@ -26,7 +26,7 @@ async function getBlogs() {
   ]);
 }
 
-// get all blogs(checked)
+// done1
 const getAllBlogs = async function (req, res) {
   await Blogs.updateMany({}, { $unset: { comments: 1 } });
 
@@ -34,7 +34,7 @@ const getAllBlogs = async function (req, res) {
   res.status(200).json({ blogs });
 };
 
-// get blogs by username(checked)
+// done1
 const getBlogsByUsername = async function (req, res) {
   const username = req.params.username;
 
@@ -56,7 +56,7 @@ const getBlogsByUsername = async function (req, res) {
   }
 };
 
-// post a blog(checked)
+// done1
 const createBlog = async function (req, res) {
   let { title, body, spaceId } = req.body;
   const user = req.user;
@@ -87,7 +87,7 @@ const createBlog = async function (req, res) {
   }
 };
 
-// get a blog(checked)
+// done1
 const getBlog = async function (req, res) {
   const { id } = req.params;
 
@@ -109,7 +109,7 @@ const getBlog = async function (req, res) {
   }
 };
 
-// delete a blog(checked)
+// done1
 const deleteBlog = async (req, res) => {
   const user = req.user;
   const { id } = req.params;
@@ -142,6 +142,7 @@ const deleteBlog = async (req, res) => {
   }
 };
 
+// done1
 const likeBlog = async (req, res) => {
   const { id } = req.params;
   try {
@@ -157,10 +158,10 @@ const likeBlog = async (req, res) => {
 };
 
 module.exports = {
-  likeBlog,
-  getAllBlogs,
-  createBlog,
-  getBlog,
-  deleteBlog,
-  getBlogsByUsername,
+  likeBlog, // done1
+  getAllBlogs, // done1
+  createBlog, // done1
+  getBlog, // done1
+  deleteBlog, // done1
+  getBlogsByUsername, // done1
 };

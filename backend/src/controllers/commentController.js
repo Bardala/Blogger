@@ -2,7 +2,7 @@ const Comments = require("../models/commentModel");
 const mongoose = require("mongoose");
 const Blogs = require("../models/blogModel");
 
-// (checked)
+// done1
 const createComment = async function (req, res) {
   const { blogId, body } = req.body;
   const user = req.user;
@@ -29,7 +29,7 @@ const createComment = async function (req, res) {
   }
 };
 
-// (checked)
+// done1
 const getComments = async function (req, res) {
   const blogId = req.query.blogId;
   if (!mongoose.Types.ObjectId.isValid(blogId))
@@ -44,6 +44,6 @@ const getComments = async function (req, res) {
 };
 
 module.exports = {
-  createComment,
-  getComments,
+  createComment, //done1
+  getComments, //done1
 };
