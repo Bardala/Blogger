@@ -12,7 +12,6 @@ export const useCreateBlog = () => {
   const [body, setBody] = useState("");
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
-  const url = "http://localhost:4000/api/createBlog";
   const nav = useNavigate();
 
   useEffect(() => {
@@ -68,14 +67,14 @@ export const useCreateBlog = () => {
 
     const postBlog = async () => {
       try {
-        const res = await fetch(url, {
+        const res = await fetch("http://localhost:4000/api/createBlog", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${user.token}`,
           },
           mode: "cors",
-          body: JSON.stringify({ title, body, author: user.username, spaceId }),
+          body: JSON.stringify({ title, body, spaceId }),
         });
         const data = await res.json();
 

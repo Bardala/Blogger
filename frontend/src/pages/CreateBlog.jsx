@@ -1,4 +1,5 @@
 import "../styles/createBlog.css";
+import styleMarkdown from "../styles/markdown.module.css";
 import Markdown from "markdown-to-jsx";
 import { useCreateBlog } from "../hooks/blogsApis";
 import { useEffect } from "react";
@@ -33,7 +34,29 @@ const CreateBlog = () => {
         />
 
         <label className="body-label">Blog body:</label>
-        <Markdown>{body}</Markdown>
+        <Markdown
+          className="blog-body"
+          options={{
+            overrides: {
+              h1: {
+                props: {
+                  className: styleMarkdown.h1,
+                },
+              },
+              h2: {
+                props: {
+                  className: styleMarkdown.h2,
+                },
+              },
+              img: {
+                props: {
+                  className: styleMarkdown.img,
+                },
+              },
+            },
+          }}
+          children={body}
+        />
 
         <textarea
           className="body-textarea"

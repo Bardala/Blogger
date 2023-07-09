@@ -1,5 +1,5 @@
 import "../styles/blogList.css";
-
+import Markdown from "markdown-to-jsx";
 import { Link } from "react-router-dom";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import LikeBlogButton from "./LikeButton";
@@ -31,7 +31,7 @@ const BlogList = ({ blogs }) => {
               </p>
             </div>
             <div className="blog-excerpt">
-              {blog.body.slice(0, 100) + "..."}
+              <Markdown>{blog.body.slice(0, 600) + "..."}</Markdown>
             </div>
           </div>
         </div>

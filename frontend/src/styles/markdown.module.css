@@ -1,0 +1,21 @@
+h1 {
+  color: green;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  text-align: center;
+}
+
+h2 {
+  color: green;
+  font-family: Arial, sans-serif;
+  font-weight: normal;
+  text-align: left;
+}
+
+img {
+  max-width: 50%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+

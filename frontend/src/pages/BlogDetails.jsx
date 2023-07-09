@@ -33,7 +33,30 @@ const BlogDetails = () => {
                   <strong>{blog.author}</strong>
                 </Link>
               </div>
-              <Markdown className="blog-body">{blog.body}</Markdown>
+              <Markdown
+                className="blog-body"
+                options={{
+                  overrides: {
+                    h1: {
+                      props: {
+                        style: { color: "green" },
+                      },
+                    },
+                    h2: {
+                      props: {
+                        style: { color: "green" },
+                      },
+                    },
+                    img: {
+                      props: {
+                        style: { maxWidth: "50%" },
+                      },
+                    },
+                  },
+                }}
+              >
+                {blog.body}
+              </Markdown>
 
               <div className="blog-meta">
                 <p className="created-at">

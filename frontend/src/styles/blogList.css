@@ -3,7 +3,7 @@
     max-width: 800px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     grid-gap: 20px;
 }
 
@@ -13,6 +13,7 @@
     border-radius: 8px;
     cursor: pointer;
     background: #fafafa;
+    height: 300px;
 }
 
 .blog-preview:hover {
