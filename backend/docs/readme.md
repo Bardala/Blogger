@@ -5,11 +5,10 @@ User schema:
 | Field     | Type        |
 | --------- | ----------- |
 | ID        | STRING/UUID |
-| Username  | STRING      |
-| Email     | STRING      |
+| Username  | STRING UNIQUE     |
+| Email     | STRING UNIQUE      |
 | Password  | STRING      |
-| CreatedAt | DATE        |
-| UpdatedAt | DATE        |
+| timestamp | STRING        |
 
 Blog schema:
 
