@@ -6,6 +6,7 @@ export interface Blog {
   content: string;
   userId: string;
   spaceId: string;
+  timestamp?: string;
 }
 
 export interface Comment {
@@ -13,6 +14,7 @@ export interface Comment {
   content: string;
   blogId: string;
   authorId: string;
+  timestamp?: string;
 }
 
 export interface Space {
@@ -21,6 +23,7 @@ export interface Space {
   status: string;
   description: string;
   ownerId: string;
+  timestamp?: string;
 }
 
 export interface User {
@@ -28,6 +31,7 @@ export interface User {
   username: string;
   email: string;
   password: string;
+  timestamp?: string;
 }
 
 export interface Like {
@@ -47,4 +51,10 @@ export type ExpressHandler<Req, Res> = RequestHandler<
   Partial<WithError<Res>>,
   Partial<Req>,
   any
+>;
+
+export type ExpressHandlerWithParams<Params, Req, Res> = RequestHandler<
+  Partial<Params>,
+  Partial<WithError<Res>>,
+  Partial<Req>
 >;

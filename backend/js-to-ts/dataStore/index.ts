@@ -12,9 +12,9 @@ export interface DataStoreDao
     SpaceDao,
     LikeDao {}
 
-export let dataStore: SqlDataStore;
+export let db: SqlDataStore;
 
 export async function initDb() {
-  dataStore = new SqlDataStore();
-  await dataStore.runDb();
+  db = new SqlDataStore();
+  await db.runDB();
 }
