@@ -46,14 +46,14 @@ export interface JwtObject {
 
 type WithError<T> = T & { error: string };
 
-export type ExpressHandler<Req, Res> = RequestHandler<
+export type Handler<Req, Res> = RequestHandler<
   string,
   Partial<WithError<Res>>,
   Partial<Req>,
   any
 >;
 
-export type ExpressHandlerWithParams<Params, Req, Res> = RequestHandler<
+export type HandlerWithParams<Params, Req, Res> = RequestHandler<
   Partial<Params>,
   Partial<WithError<Res>>,
   Partial<Req>

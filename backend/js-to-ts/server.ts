@@ -1,9 +1,3 @@
-// import {
-//   createBlog,
-//   createSpace,
-//   createUser,
-//   getBlog,
-// } from "./controllers/test.controller";
 import { db, initDb } from "./dataStore";
 import { UserController } from "./src/controllers/user.controller";
 import { errorHandler } from "./src/middleware/errorHandler";
@@ -22,10 +16,9 @@ import asyncHandler from "express-async-handler";
 
   const userController = new UserController(db);
 
-  app.post("/v0/user", asyncHandler(userController.signUp));
-  // app.post("/v0/space", asyncHandler(createSpace));
-  // app.post("/v0/blog", asyncHandler(createBlog));
-  // app.get("/v0/blog/:id", asyncHandler(getBlog));
+  app.post("/api/v0/signup", asyncHandler(userController.signup));
+  app.post("/api/v0/login", asyncHandler(userController.login));
+  app.get("/api/v0/getUsersList", asyncHandler(userController.getUsersList));
 
   app.use(errorHandler);
 

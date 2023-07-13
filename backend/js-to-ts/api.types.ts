@@ -18,6 +18,32 @@ export interface LoginRes {
   jwt: string;
 }
 
+export interface GetUserReq {}
+export interface GetUserRes {
+  user: Pick<User, "email" | "id" | "username" | "timestamp">;
+  numOfFollowers: number;
+  numOfFollowing: number;
+  numOfBlogs: number;
+  numOfSpaces: number;
+  numOfComments: number;
+}
+
+export interface getUsersListReq {}
+export interface getUsersListRes {
+  usernames: string[];
+}
+
+export interface followUserReq {}
+export interface followUserRes {}
+
+export interface unFollowUserReq {}
+export interface unFollowUserRes {}
+
+export interface getFollowersReq {}
+export interface getFollowersRes {
+  followersUsername: string[];
+}
+
 // * Blog APIs
 // createBlog
 export type CreateBlogReq = Pick<Blog, "title" | "content" | "spaceId">;

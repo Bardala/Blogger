@@ -19,6 +19,21 @@ export class SqlDataStore implements DataStoreDao {
     return this;
   }
 
+  async getFollowers(followingId: string): Promise<Pick<User, "username">[]> {
+    const query = `
+    SELECT users.username
+    FROM users
+    INNER JOIN follows ON users.id = follows.followerId
+    WHERE follows.followingId = ?
+  `;
+
+    const [rows] = await this.pool.query<RowDataPacket[]>(query, [followingId]);
+
+    return rows.map((row) => ({
+      username: row.username,
+    }));
+  }
+
   async createUser(user: User): Promise<void> {
     await this.pool.query<RowDataPacket[]>(
       "INSERT INTO users SET id=?, username=?, password=?, email=?",
@@ -51,6 +66,40 @@ export class SqlDataStore implements DataStoreDao {
     return rows[0] as User;
   }
 
+  async getUsers(): Promise<User[]> {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      "SELECT * FROM users",
+    );
+    return rows as User[];
+  }
+
+  async getUsersList(): Promise<string[]> {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      "SELECT username FRoM users",
+    );
+
+    // rows = [
+    //   {username: 'islam'},
+    //   {username: 'ali'},
+    // ]
+
+    return rows.map((obj) => obj.username);
+  }
+
+  async followUser(followerId: string, followingId: string): Promise<void> {
+    await this.pool.query<RowDataPacket[]>(
+      "INSERT INTO follows SET followerId=?, followingId=?",
+      [followerId, followingId],
+    );
+  }
+
+  async unFollowUser(followerId: string, followingId: string): Promise<void> {
+    await this.pool.query<RowDataPacket[]>(
+      "DELETE FROM follows WHERE followerId=?, followingId=?",
+      [followerId, followingId],
+    );
+  }
+
   async createBlog(blog: Blog): Promise<void> {
     await this.pool.query(
       "INSERT INTO blogs SET id=?, title=?, content=?, userId=?, spaceId=?",
@@ -58,7 +107,7 @@ export class SqlDataStore implements DataStoreDao {
     );
   }
 
-  async getSpaceBlogs(spaceId: string): Promise<Blog[]> {
+  async getBlogs(spaceId: string): Promise<Blog[]> {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT * FROM blogs WHERE spaceId = ?",
       [spaceId],

@@ -11,15 +11,15 @@ import {
 import { db } from "../../dataStore";
 import {
   Blog,
-  ExpressHandler,
-  ExpressHandlerWithParams,
+  Handler,
+  HandlerWithParams,
   Space,
   User,
 } from "../../dataStore/types";
 import { Errors } from "../../errors";
 import crypto from "crypto";
 
-export const getBlog: ExpressHandlerWithParams<
+export const getBlog: HandlerWithParams<
   { id: string },
   BlogReq,
   BlogRes
@@ -29,7 +29,7 @@ export const getBlog: ExpressHandlerWithParams<
   return res.send({ blog: await db.getBlog(req.params.id) });
 };
 
-export const createBlog: ExpressHandler<CreateBlogReq, CreateBlogRes> = async (
+export const createBlog: Handler<CreateBlogReq, CreateBlogRes> = async (
   req,
   res,
 ) => {
@@ -49,10 +49,10 @@ export const createBlog: ExpressHandler<CreateBlogReq, CreateBlogRes> = async (
   return res.sendStatus(200);
 };
 
-export const createSpace: ExpressHandler<
-  CreateSpaceReq,
-  CreateSpaceRes
-> = async (req, res) => {
+export const createSpace: Handler<CreateSpaceReq, CreateSpaceRes> = async (
+  req,
+  res,
+) => {
   const { name, status, description } = req.body;
 
   if (!name || !status || !description) throw new Error("All Fields Required");
@@ -69,10 +69,7 @@ export const createSpace: ExpressHandler<
   return res.sendStatus(200);
 };
 
-export const createUser: ExpressHandler<SignUpReq, SignUpRes> = async (
-  req,
-  res,
-) => {
+export const createUser: Handler<SignUpReq, SignUpRes> = async (req, res) => {
   const { email, password, username } = req.body;
 
   if (!email || !password || !username) throw new Error("All Fields Required");
