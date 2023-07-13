@@ -22,7 +22,6 @@ export const requireAuth: RequestHandler<any, any> = async (req, res, next) => {
     return res.status(HTTP.UNAUTHORIZED).send({ error: Errors.INVALID_TOKEN });
   }
 
-  console.log(payload, typeof payload);
   const user = await db.getUserById(payload.id);
   if (!user)
     return res.status(HTTP.UNAUTHORIZED).send({ error: Errors.INVALID_TOKEN });

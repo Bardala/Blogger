@@ -1,16 +1,18 @@
 import {
-  GetUserReq,
-  GetUserRes,
+  GetUserCardReq,
+  GetUserCardRes,
   LoginReq,
   LoginRes,
   SignUpReq,
   SignUpRes,
-  followUserReq,
-  followUserRes,
-  getUsersListReq,
-  getUsersListRes,
-  unFollowUserReq,
-  unFollowUserRes,
+  FollowUserReq,
+  FollowUserRes,
+  GetFollowersReq,
+  GetFollowersRes,
+  GetUsersListReq,
+  GetUsersListRes,
+  UnFollowUserReq,
+  UnFollowUserRes,
 } from "../../api.types";
 import { SqlDataStore } from "../../dataStore/sql/SqlDataStore.class";
 import { Handler, HandlerWithParams } from "../../dataStore/types";
@@ -23,21 +25,22 @@ import validator from "validator";
 interface userController {
   signup: Handler<SignUpReq, SignUpRes>;
   login: Handler<LoginReq, LoginRes>;
-  getUsersList: Handler<GetUserReq, GetUserRes>;
-  followUser: HandlerWithParams<
-    { followingId: string },
-    followUserReq,
-    followUserRes
+  getUsersList: Handler<GetUserCardReq, GetUserCardRes>;
+  getUserCard: HandlerWithParams<
+    { id: string },
+    GetUserCardReq,
+    GetUserCardRes
   >;
-  unFollowUser: HandlerWithParams<
-    { followingId: string },
-    unFollowUserReq,
-    unFollowUserRes
+  createFollow: HandlerWithParams<{ id: string }, FollowUserReq, FollowUserRes>;
+  deleteFollow: HandlerWithParams<
+    { id: string },
+    UnFollowUserReq,
+    UnFollowUserRes
   >;
   getFollowers: HandlerWithParams<
-    { userId: string },
-    unFollowUserReq,
-    unFollowUserRes
+    { id: string },
+    GetFollowersReq,
+    GetFollowersRes
   >;
 }
 
@@ -48,24 +51,82 @@ export class UserController implements userController {
     this.db = db;
   }
 
-  // todo
-  followUser!: HandlerWithParams<
-    { followingId: string },
-    followUserReq,
-    followUserRes
-  >;
-  unFollowUser!: HandlerWithParams<
-    { followingId: string },
-    unFollowUserReq,
-    unFollowUserRes
-  >;
-  getFollowers!: HandlerWithParams<
-    { userId: string },
-    unFollowUserReq,
-    unFollowUserRes
-  >;
+  getUserCard: HandlerWithParams<
+    { id: string },
+    GetUserCardReq,
+    GetUserCardRes
+  > = async (req, res) => {
+    if (!req.params.id) {
+      return res
+        .status(HTTP.BAD_REQUEST)
+        .send({ error: Errors.PARAMS_MISSING });
+    }
 
-  getUsersList: Handler<getUsersListReq, getUsersListRes> = async (
+    return res.status(HTTP.OK).send({
+      userCard: await this.db.getUserCard(res.locals.userId, req.params.id),
+    });
+  };
+
+  createFollow: HandlerWithParams<
+    { id: string },
+    FollowUserReq,
+    FollowUserRes
+  > = async (req, res) => {
+    if (!req.params.id) {
+      return res
+        .status(HTTP.BAD_REQUEST)
+        .send({ error: Errors.PARAMS_MISSING });
+    }
+
+    if (await this.db.isFollow(req.params.id, res.locals.userId)) {
+      return res
+        .status(HTTP.BAD_REQUEST)
+        .send({ error: Errors.ALREADY_FOLLOWER });
+    }
+
+    await this.db.createFollow(res.locals.userId, req.params.id);
+    return res.sendStatus(HTTP.OK);
+  };
+
+  deleteFollow: HandlerWithParams<
+    { id: string },
+    UnFollowUserReq,
+    UnFollowUserRes
+  > = async (req, res) => {
+    if (!req.params.id) {
+      return res
+        .status(HTTP.BAD_REQUEST)
+        .send({ error: Errors.PARAMS_MISSING });
+    }
+
+    // todo check Is already an unfollower
+    if (!(await this.db.isFollow(req.params.id, res.locals.userId))) {
+      return res
+        .status(HTTP.BAD_REQUEST)
+        .send({ error: Errors.ALREADY_UNFOLLOWER });
+    }
+
+    await this.db.deleteFollow(res.locals.userId, req.params.id);
+    return res.sendStatus(200);
+  };
+
+  getFollowers: HandlerWithParams<
+    { id: string },
+    GetFollowersReq,
+    GetFollowersRes
+  > = async (req, res) => {
+    if (!req.params.id) {
+      return res
+        .status(HTTP.BAD_REQUEST)
+        .send({ error: Errors.PARAMS_MISSING });
+    }
+
+    return res
+      .status(200)
+      .send({ followersUsername: await this.db.getFollowers(req.params.id) });
+  };
+
+  getUsersList: Handler<GetUsersListReq, GetUsersListRes> = async (
     _req,
     res,
   ) => {

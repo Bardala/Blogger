@@ -1,4 +1,4 @@
-import { Blog, Comment, Space, User } from "./dataStore/types";
+import { Blog, Comment, Space, User, UserCard } from "./dataStore/types";
 
 /**
  ** I am trying here to translate master's controllers types with some changes
@@ -18,29 +18,24 @@ export interface LoginRes {
   jwt: string;
 }
 
-export interface GetUserReq {}
-export interface GetUserRes {
-  user: Pick<User, "email" | "id" | "username" | "timestamp">;
-  numOfFollowers: number;
-  numOfFollowing: number;
-  numOfBlogs: number;
-  numOfSpaces: number;
-  numOfComments: number;
+export interface GetUserCardReq {}
+export interface GetUserCardRes {
+  userCard: UserCard;
 }
 
-export interface getUsersListReq {}
-export interface getUsersListRes {
+export interface GetUsersListReq {}
+export interface GetUsersListRes {
   usernames: string[];
 }
 
-export interface followUserReq {}
-export interface followUserRes {}
+export interface FollowUserReq {}
+export interface FollowUserRes {}
 
-export interface unFollowUserReq {}
-export interface unFollowUserRes {}
+export interface UnFollowUserReq {}
+export interface UnFollowUserRes {}
 
-export interface getFollowersReq {}
-export interface getFollowersRes {
+export interface GetFollowersReq {}
+export interface GetFollowersRes {
   followersUsername: string[];
 }
 
@@ -100,8 +95,8 @@ export interface AllSpacesRes_Dev {
 export type CreateSpaceReq = Pick<Space, "name" | "status" | "description">;
 export interface CreateSpaceRes {
   space: Space;
-  admins: Pick<User, "username">;
-  members: Pick<User, "username">;
+  admins: string;
+  members: string;
   blogs: Blog[];
 }
 
@@ -116,8 +111,8 @@ export interface DefaultSpaceRes {
 export interface SpaceReq {}
 export interface SpaceRes {
   space: Space;
-  admins: Pick<User, "username">;
-  members: Pick<User, "username">;
+  admins: string;
+  members: string;
   blogs: Blog[];
 }
 

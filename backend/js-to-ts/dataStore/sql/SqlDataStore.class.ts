@@ -1,5 +1,5 @@
 import { DataStoreDao } from "..";
-import { User, Blog, Comment, Space, Like } from "../types";
+import { User, Blog, Comment, Space, Like, UserCard } from "../types";
 import mysql, { RowDataPacket } from "mysql2";
 import { Pool } from "mysql2/promise";
 
@@ -19,7 +19,7 @@ export class SqlDataStore implements DataStoreDao {
     return this;
   }
 
-  async getFollowers(followingId: string): Promise<Pick<User, "username">[]> {
+  async getFollowers(followingId: string): Promise<string[]> {
     const query = `
     SELECT users.username
     FROM users
@@ -29,9 +29,7 @@ export class SqlDataStore implements DataStoreDao {
 
     const [rows] = await this.pool.query<RowDataPacket[]>(query, [followingId]);
 
-    return rows.map((row) => ({
-      username: row.username,
-    }));
+    return rows.map((obj) => obj.username);
   }
 
   async createUser(user: User): Promise<void> {
@@ -66,6 +64,25 @@ export class SqlDataStore implements DataStoreDao {
     return rows[0] as User;
   }
 
+  async getUserCard(
+    userId: string,
+    cardOwnerId: string,
+  ): Promise<UserCard | undefined> {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      `
+      SELECT users.id, users.username, users.email, users.timestamp,  
+      (SELECT COUNT(*) FROM follows WHERE follows.followingId = users.id) AS followersNum,
+      (SELECT COUNT(*) FROM follows WHERE follows.followerId = users.id) AS followingNum,
+      (SELECT COUNT(*) FROM follows WHERE follows.followerId = ? AND follows.followingId = users.id) AS isFollowing
+      FROM users
+      WHERE users.id = ?
+    `,
+      [userId, cardOwnerId],
+    );
+
+    return rows[0] as UserCard;
+  }
+
   async getUsers(): Promise<User[]> {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT * FROM users",
@@ -86,16 +103,31 @@ export class SqlDataStore implements DataStoreDao {
     return rows.map((obj) => obj.username);
   }
 
-  async followUser(followerId: string, followingId: string): Promise<void> {
+  async isFollow(followingId: string, userId: string): Promise<boolean> {
+    const query = `
+    SELECT followerId FROM follows 
+    WHERE 
+    followingId = ? AND followerId = ?
+    `;
+
+    const [rows] = await this.pool.query<RowDataPacket[]>(query, [
+      followingId,
+      userId,
+    ]);
+
+    return rows[0] ? true : false;
+  }
+
+  async createFollow(followerId: string, followingId: string): Promise<void> {
     await this.pool.query<RowDataPacket[]>(
       "INSERT INTO follows SET followerId=?, followingId=?",
       [followerId, followingId],
     );
   }
 
-  async unFollowUser(followerId: string, followingId: string): Promise<void> {
+  async deleteFollow(followerId: string, followingId: string): Promise<void> {
     await this.pool.query<RowDataPacket[]>(
-      "DELETE FROM follows WHERE followerId=?, followingId=?",
+      "DELETE FROM follows WHERE followerId=? AND followingId=?",
       [followerId, followingId],
     );
   }

@@ -34,6 +34,16 @@ export interface User {
   timestamp?: string;
 }
 
+export interface UserCard {
+  id: string;
+  username: string;
+  email: string;
+  timestamp: string;
+  followersNum: number;
+  followingNum: number;
+  isFollowing: number;
+}
+
 export interface Like {
   id: string;
   blogId: string;

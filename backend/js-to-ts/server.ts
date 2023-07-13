@@ -17,12 +17,25 @@ import asyncHandler from "express-async-handler";
 
   const userController = new UserController(db);
 
+  // *Auth Routes
   app.post("/api/v0/signup", asyncHandler(userController.signup));
   app.post("/api/v0/login", asyncHandler(userController.login));
 
   app.use(requireAuth);
 
-  app.get("/api/v0/getUsersList", asyncHandler(userController.getUsersList));
+  // *User Routes
+  app.get("/api/v0/getUserCard/:id", asyncHandler(userController.getUserCard));
+  app.post("/api/v0/followUser/:id", asyncHandler(userController.createFollow));
+  app.delete(
+    "/api/v0/unFollowUser/:id",
+    asyncHandler(userController.deleteFollow),
+  );
+  app.get(
+    "/api/v0/getFollowers/:id",
+    asyncHandler(userController.getFollowers),
+  );
+  app.get("/api/v0/usersList", asyncHandler(userController.getUsersList));
+  app.get("/api/v0/getUserCard/:id", asyncHandler(userController.getUserCard));
 
   app.use(errorHandler);
 

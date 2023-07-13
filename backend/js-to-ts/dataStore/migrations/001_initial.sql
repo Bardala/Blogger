@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS comments (
 );
 
 CREATE TABLE IF NOT EXISTS follows (
-    id VARCHAR(255) NOT NULL ,
+    id INT AUTO_INCREMENT;
     followerId VARCHAR(255) NOT NULL,
     followingId VARCHAR(255) NOT NULL,
     PRIMARY KEY (id),

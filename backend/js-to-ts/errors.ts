@@ -11,4 +11,7 @@ export enum Errors {
   INVALID_TOKEN = "Invalid token",
   UNAUTHORIZED = "Unauthorized",
   TOKENEXPIRED = "Token expired",
+  PARAMS_MISSING = "Params missing",
+  ALREADY_FOLLOWER = "You already follow this user",
+  ALREADY_UNFOLLOWER = "You already unfollow this user",
 }

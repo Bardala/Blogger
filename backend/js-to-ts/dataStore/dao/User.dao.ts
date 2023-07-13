@@ -1,4 +1,4 @@
-import { User } from "../types";
+import { User, UserCard } from "../types";
 
 export interface UserDao {
   createUser(user: User): Promise<void>;
@@ -7,7 +7,11 @@ export interface UserDao {
   getUserByEmail(email: string): Promise<User | undefined>;
   getUsers(): Promise<User[]>;
   getUsersList(): Promise<string[]>;
-  followUser(followerId: string, followingId: string): Promise<void>;
-  unFollowUser(followerId: string, followingId: string): Promise<void>;
-  getFollowers(followingId: string): Promise<Pick<User, "username">[]>;
+  createFollow(followerId: string, followingId: string): Promise<void>;
+  deleteFollow(followerId: string, followingId: string): Promise<void>;
+  getFollowers(followingId: string): Promise<string[]>;
+  getUserCard(
+    userId: string,
+    cardOwnerId: string,
+  ): Promise<UserCard | undefined>;
 }
