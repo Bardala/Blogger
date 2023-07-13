@@ -58,3 +58,7 @@ export type HandlerWithParams<Params, Req, Res> = RequestHandler<
   Partial<WithError<Res>>,
   Partial<Req>
 >;
+
+export interface JwtObj {
+  userId: string;
+}

@@ -1,5 +1,6 @@
 import { db, initDb } from "./dataStore";
 import { UserController } from "./src/controllers/user.controller";
+import { requireAuth } from "./src/middleware/authMiddleware";
 import { errorHandler } from "./src/middleware/errorHandler";
 import dotenv from "dotenv";
 import express from "express";
@@ -18,6 +19,9 @@ import asyncHandler from "express-async-handler";
 
   app.post("/api/v0/signup", asyncHandler(userController.signup));
   app.post("/api/v0/login", asyncHandler(userController.login));
+
+  app.use(requireAuth);
+
   app.get("/api/v0/getUsersList", asyncHandler(userController.getUsersList));
 
   app.use(errorHandler);

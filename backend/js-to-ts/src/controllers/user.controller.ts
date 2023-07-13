@@ -16,8 +16,8 @@ import { SqlDataStore } from "../../dataStore/sql/SqlDataStore.class";
 import { Handler, HandlerWithParams } from "../../dataStore/types";
 import { Errors } from "../../errors";
 import { HTTP } from "../../httpStatusCodes";
+import { createToken, hashPassword } from "../middleware/authMiddleware";
 import crypto from "crypto";
-import jwt from "jsonwebtoken";
 import validator from "validator";
 
 interface userController {
@@ -104,12 +104,12 @@ export class UserController implements userController {
       email,
       username,
       id: crypto.randomUUID() as string,
-      password: this.hashPassword(password),
+      password: hashPassword(password),
     };
 
     await this.db.createUser(user);
 
-    return res.send({ jwt: this.createToken(user.id) });
+    return res.send({ jwt: createToken(user.id) });
   };
 
   login: Handler<LoginReq, LoginRes> = async (req, res) => {
@@ -125,25 +125,6 @@ export class UserController implements userController {
     if (!user)
       return res.status(HTTP.BAD_REQUEST).send({ error: Errors.INVALID_LOGIN });
 
-    return res.status(200).send({ jwt: this.createToken(user.id) });
+    return res.status(200).send({ jwt: createToken(user.id) });
   };
-
-  private generateJwtSecret(): string {
-    const secret = process.env.JWT_SECRET;
-    if (!secret) {
-      console.error("Missing jwt secret");
-      process.exit(1);
-    }
-    return secret;
-  }
-
-  private hashPassword(password: string): string {
-    return crypto
-      .pbkdf2Sync(password, this.generateJwtSecret()!, 20, 20, "sha512")
-      .toString("hex");
-  }
-
-  private createToken(id: string): string {
-    return jwt.sign({ id }, this.generateJwtSecret()!, { expiresIn: "45d" });
-  }
 }

@@ -10,4 +10,5 @@ export enum Errors {
   INVALID_PASSWORD = "Invalid password",
   INVALID_TOKEN = "Invalid token",
   UNAUTHORIZED = "Unauthorized",
+  TOKENEXPIRED = "Token expired",
 }
